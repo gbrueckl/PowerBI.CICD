@@ -40,7 +40,7 @@ foreach($pbixFile in $pbixFiles)
 	New-PowerBIReport -Path $pbixfile.FullName -Name $temp_name -WorkspaceId $workspace.Id
 
 	$dataset = Get-PowerBIDataset -WorkspaceId $workspace.Id -Name $temp_name
-	$connection_string = "powerbi://api.powerbi.com/v1.0/myorg/$($workspace.Name);initial catalog=$($dataset.Name)"
+	$connection_string = "powerbi://api.powerbi.com/v1.0/myorg/$($workspace.Name)"#;initial catalog=$($dataset.Name)"
 
 	$executable = Join-Path $root_path tools TabularEditor2 TabularEditor.exe
 
@@ -50,8 +50,7 @@ foreach($pbixFile in $pbixFiles)
 		"-FOLDER $(Join-Path $pbixFile.DirectoryName $pbixFile.BaseName '')"
 	)
 
-	Write-Information "$executable $($params -replace $client_secret, "<REDACTED>")"
-	Write-Debug "$executable $params"
+	Write-Information "$executable $params"
 	$p = Start-Process -FilePath $executable -Wait -NoNewWindow -PassThru -ArgumentList $params
 
 	Write-Information $p.ExitCode

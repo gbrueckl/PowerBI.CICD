@@ -7,7 +7,7 @@ on:
     - '**/*.pbix'
 
 jobs:
-  build:
+  extract_pbix_metadata:
     runs-on: windows-latest
     environment: PowerBI
     env:
