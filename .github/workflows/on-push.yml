@@ -1,0 +1,31 @@
+name: Pre-production workflow
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+    - '**/*.pbix'
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    env:
+      PBI_TENANT_ID: ${{ secrets.PBI_TENANT_ID }}
+      PBI_CLIENT_ID: ${{ secrets.PBI_CLIENT_ID }}
+      PBI_CLIENT_SECRET: ${{ secrets.PBI_CLIENT_SECRET }}
+      PBI_WORKSPACE_ID: ${{ secrets.PBI_WORKSPACE_ID }}
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Extract PBIX Metadata
+      run: |
+          ./src/Extract-PBIXMetadata.ps1
+      shell: pwsh
+    - name: Push PBIX MetaData
+      run: |
+          git config --global user.name 'Your Name'
+          git config --global user.email 'your-username@users.noreply.github.com'
+          git commit -am "Extract PBIX Metadata"
+          git push
+
