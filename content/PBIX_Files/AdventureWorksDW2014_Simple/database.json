@@ -1,6 +1,6 @@
 {
-  "name": "AdventureWorksDW2014_Simple-20220120T122728",
-  "id": "f73bb6f0-ec5f-4bb0-84d6-a874854bf201",
+  "name": "AdventureWorksDW2014_Simple-20220120T123307",
+  "id": "9b262823-a893-4bbb-95e6-c982a8526972",
   "compatibilityLevel": 1550,
   "model": {
     "culture": "en-US",
@@ -1523,6 +1523,20 @@
                 "    #\"Removed Columns\""
               ]
             }
+          }
+        ],
+        "measures": [
+          {
+            "name": "Measure",
+            "expression": "1",
+            "formatString": "0",
+            "lineageTag": "b2b05fc4-5284-44e4-9a25-df30c568d5cc",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"NumberWhole\" Accuracy=\"0\" />"
+              }
+            ]
           }
         ],
         "annotations": [
