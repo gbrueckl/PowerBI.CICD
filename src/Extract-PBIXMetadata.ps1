@@ -32,13 +32,13 @@ Connect-PowerBIServiceAccount -Credential $credential -ServicePrincipal -TenantI
 
 $workspace = Get-PowerBIWorkspace -Id $workspace_id
 
-$pbixFiles = Get-ChildItem -Path $(Join-Path $root_path "content" "PBIX_Files" "*.pbix")
+$pbix_files = Get-ChildItem -Path $(Join-Path $root_path "content" "PBIX_Files" "*.pbix")
 
-foreach($pbixFile in $pbixFiles)
+foreach($pbix_file in $pbix_files)
 {
-	$temp_name = "$($pbixFile.BaseName)-$(Get-Date -Format 'yyyyMMddTHHmmss')"
-	Write-Information "Uploading $($pbixfile.FullName) to $($workspace.Name)/$temp_name ... "
-	$report = New-PowerBIReport -Path $pbixfile.FullName -Name $temp_name -WorkspaceId $workspace.Id -ConflictAction Overwrite
+	$temp_name = "$($pbix_file.BaseName)-$(Get-Date -Format 'yyyyMMddTHHmmss')"
+	Write-Information "Uploading $($pbix_file.FullName) to $($workspace.Name)/$temp_name ... "
+	$report = New-PowerBIReport -Path $pbix_file.FullName -Name $temp_name -WorkspaceId $workspace.Id
 	Start-Sleep -Seconds 5
 	Write-Information "    Done!"
 
@@ -51,7 +51,7 @@ foreach($pbixFile in $pbixFiles)
 	$params = @(
 		"""Provider=MSOLAP;Data Source=$connection_string;User ID=app:$client_id@$tenant_id;Password=$client_secret"""
 		"""$($dataset.Name)"""
-		"-FOLDER $(Join-Path $pbixFile.DirectoryName $pbixFile.BaseName '')"
+		"-FOLDER $(Join-Path $pbix_file.DirectoryName $pbix_file.BaseName '')"
 	)
 
 	Write-Information "$executable $params"
