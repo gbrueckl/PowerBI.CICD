@@ -34,7 +34,7 @@ $workspace = Get-PowerBIWorkspace -Id $workspace_id
 
 #$pbix_files = Get-ChildItem -Path $(Join-Path $root_path "content" "PBIX_Files" "*.pbix")
 $changed_files = Join-Path $root_path "tmp_changed_files.txt"
-$x = Start-Process "git" -ArgumentList @("diff", "--name-only", "HEAD..HEAD^", """*.pbix""") -Wait -PassThru -NoNewWindow -RedirectStandardOutput $changed_files
+$x = Start-Process "git" -ArgumentList @("diff", "--name-only", "main..HEAD^", """*.pbix""") -Wait -PassThru -NoNewWindow -RedirectStandardOutput $changed_files
 $pbix_files = Get-Content -Path $changed_files | ForEach-Object { Join-Path $root_path $_}
 Remove-Item $changed_files
 foreach($pbix_file in $pbix_files)
