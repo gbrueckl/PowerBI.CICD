@@ -30,7 +30,6 @@ $workspace_id = $env:PBI_WORKSPACE_ID
 
 Connect-PowerBIServiceAccount -Credential $credential -ServicePrincipal -TenantId $tenant_id
 
-
 $workspace = Get-PowerBIWorkspace -Id $workspace_id
 
 $pbixFiles = Get-ChildItem -Path $(Join-Path $root_path "content" "PBIX_Files")
@@ -43,23 +42,17 @@ foreach($pbixFile in $pbixFiles)
 	$dataset = Get-PowerBIDataset -WorkspaceId $workspace.Id -Name $temp_name
 	$connection_string = "powerbi://api.powerbi.com/v1.0/myorg/$($workspace.Name);initial catalog=$($dataset.Name)"
 
-	#Provider=MSOLAP;Data Source=<xmla endpoint>;User ID=app:<application id>@<tenant id>;Password=<application secret>
 	$executable = Join-Path $root_path tools TabularEditor2 TabularEditor.exe
 
 	$params = @(
 		"""Provider=MSOLAP;Data Source=$connection_string;User ID=app:$client_id@$tenant_id;Password=$client_secret"""
 		"""$($dataset.Name)"""
-		"-F"
-		"""$(Join-Path $pbixFile.DirectoryName $pbixFile.BaseName '')"""
+		"-FOLDER $(Join-Path $pbixFile.DirectoryName $pbixFile.BaseName '')"
 	)
 
 	Write-Information "$executable $($params -replace $client_secret, "<REDACTED>")"
-	Write-Information "$executable $params"
-	& $executable $params
+	Write-Debug "$executable $params"
+	$p = Start-Process -FilePath $executable -Wait -NoNewWindow -PassThru -ArgumentList $params
 
-	$cmd = "& $executable $params"
-
-	$result = Invoke-Expression $cmd
-
-	Write-Host "ASDF"
+	Write-Information $p.ExitCode
 }

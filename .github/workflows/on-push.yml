@@ -1,4 +1,4 @@
-name: Pre-production workflow
+name: Post-Push workflow - Extract PBIX Metadata
 
 on:
   workflow_dispatch:
