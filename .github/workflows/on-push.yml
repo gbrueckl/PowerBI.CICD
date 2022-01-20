@@ -11,23 +11,21 @@ jobs:
     runs-on: windows-latest
     environment: PowerBI
     env:
-      PBI_TENANT_ID: ${{secrets.PBI_TENANT_ID}}
-      PBI_CLIENT_ID: ${{secrets.PBI_CLIENT_ID}}
-      PBI_CLIENT_SECRET: ${{secrets.PBI_CLIENT_SECRET}}
-      PBI_WORKSPACE_ID: ${{secrets.PBI_WORKSPACE_ID}}
+      PBI_TENANT_ID: ${{ secrets.PBI_TENANT_ID }}
+      PBI_CLIENT_ID: ${{ secrets.PBI_CLIENT_ID }}
+      PBI_CLIENT_SECRET: ${{ secrets.PBI_CLIENT_SECRET }}
+      PBI_WORKSPACE_ID: ${{ secrets.PBI_WORKSPACE_ID }}
+      GIT_EVENT_BEFORE: ${{ github.event.before }}
+      GIT_EVENT_AFTER: ${{ github.event.after }}
 
     steps:
     - uses: actions/checkout@v2
       with: 
         fetch-depth: 0
 
-    - name: get file changes
+    - name: List changed PBIX files
       run: | 
-          git diff --name-only ${{ github.event.before }} ${{ github.event.after }}
-
-    - name: get committed files
-      run: |
-          git diff-tree --no-commit-id --name-only -r ${{ github.sha }}
+          git diff --name-only ${{ github.event.before }} ${{ github.event.after }} "*.pbix"
     
     - name: Extract PBIX Metadata
       run: |

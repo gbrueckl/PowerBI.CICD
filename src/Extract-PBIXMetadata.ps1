@@ -23,6 +23,8 @@ $client_id = $env:PBI_CLIENT_ID
 $client_secret = $env:PBI_CLIENT_SECRET
 $workspace_id = $env:PBI_WORKSPACE_ID
 
+$git_event_before = $env:GIT_EVENT_BEFORE
+$git_event_after = $env:GIT_EVENT_AFTER
 
 # Convert to SecureString
 [securestring]$sec_client_secret = ConvertTo-SecureString $client_secret -AsPlainText -Force
@@ -33,10 +35,14 @@ Connect-PowerBIServiceAccount -Credential $credential -ServicePrincipal -TenantI
 $workspace = Get-PowerBIWorkspace -Id $workspace_id
 
 #$pbix_files = Get-ChildItem -Path $(Join-Path $root_path "content" "PBIX_Files" "*.pbix")
-$changed_files = Join-Path $root_path "tmp_changed_files.txt"
-$x = Start-Process "git" -ArgumentList @("diff", "--name-only", "HEAD~1", """*.pbix""") -Wait -PassThru -NoNewWindow -RedirectStandardOutput $changed_files
-$pbix_files = Get-Content -Path $changed_files | ForEach-Object { Join-Path $root_path $_}
+# get the changed .pbix files in the current push
+$changed_files = Join-Path $root_path "_tmp_changed_files.txt"
+$x = Start-Process "git" -ArgumentList @("diff", "--name-only", $git_event_before, $git_event_after, """*.pbix""") -Wait -PassThru -NoNewWindow -RedirectStandardOutput $changed_files
+#$x = Start-Process "git" -ArgumentList @("diff", "--name-only", "HEAD~2", """*.pbix""") -Wait -PassThru -NoNewWindow -RedirectStandardOutput $changed_files
+$pbix_files = Get-Content -Path $changed_files | ForEach-Object { Join-Path $root_path $_ | Get-Item}
 Remove-Item $changed_files
+
+Write-Information $pbix_files
 
 foreach($pbix_file in $pbix_files)
 {
