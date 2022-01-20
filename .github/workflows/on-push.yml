@@ -9,7 +9,7 @@ on:
 jobs:
   build:
     runs-on: windows-latest
-
+    environment: PowerBI
     env:
       PBI_TENANT_ID: ${{secrets.PBI_TENANT_ID}}
       PBI_CLIENT_ID: ${{secrets.PBI_CLIENT_ID}}
