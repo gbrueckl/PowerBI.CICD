@@ -11,10 +11,10 @@ jobs:
     runs-on: windows-latest
 
     env:
-      PBI_TENANT_ID: ${{ secrets.PBI_TENANT_ID }}
-      PBI_CLIENT_ID: ${{ secrets.PBI_CLIENT_ID }}
-      PBI_CLIENT_SECRET: ${{ secrets.PBI_CLIENT_SECRET }}
-      PBI_WORKSPACE_ID: ${{ secrets.PBI_WORKSPACE_ID }}
+      PBI_TENANT_ID: ${{secrets.PBI_TENANT_ID}}
+      PBI_CLIENT_ID: ${{secrets.PBI_CLIENT_ID}}
+      PBI_CLIENT_SECRET: ${{secrets.PBI_CLIENT_SECRET}}
+      PBI_WORKSPACE_ID: ${{secrets.PBI_WORKSPACE_ID}}
 
     steps:
     - uses: actions/checkout@v2
