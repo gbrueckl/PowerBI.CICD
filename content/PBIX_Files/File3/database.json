@@ -1,6 +1,6 @@
 {
-  "name": "File3-20220120T193235",
-  "id": "3a1de430-b49b-4c03-b263-92550e95dae4",
+  "name": "File3-20220120T195348",
+  "id": "5cd73055-ea17-453e-8135-456cf6fe3601",
   "compatibilityLevel": 1550,
   "model": {
     "culture": "en-US",
@@ -365,6 +365,19 @@
                 "    #\"Removed Columns\""
               ]
             }
+          }
+        ],
+        "measures": [
+          {
+            "name": "Measure 2",
+            "expression": "\"I am a new measure!\"",
+            "lineageTag": "68ce9040-848f-461a-9ebb-0eebaafa6337",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Text\" />"
+              }
+            ]
           }
         ],
         "annotations": [
