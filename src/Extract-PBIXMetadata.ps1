@@ -32,13 +32,13 @@ Connect-PowerBIServiceAccount -Credential $credential -ServicePrincipal -TenantI
 
 $workspace = Get-PowerBIWorkspace -Id $workspace_id
 
-$pbixFiles = Get-ChildItem -Path $(Join-Path $root_path "content" "PBIX_Files")
+$pbixFiles = Get-ChildItem -Path $(Join-Path $root_path "content" "PBIX_Files" "*.pbix")
 
 foreach($pbixFile in $pbixFiles)
 {
 	$temp_name = "$($pbixFile.BaseName)-$(Get-Date -Format 'yyyyMMddTHHmmss')"
 	Write-Information "Uploading $($pbixfile.FullName) to $($workspace.Name)/$temp_name ... "
-	$report = New-PowerBIReport -Path $pbixfile.FullName -Name $temp_name -WorkspaceId $workspace.Id
+	$report = New-PowerBIReport -Path $pbixfile.FullName -Name $temp_name -WorkspaceId $workspace.Id -ConflictAction Overwrite
 	Start-Sleep -Seconds 5
 	Write-Information "    Done!"
 
