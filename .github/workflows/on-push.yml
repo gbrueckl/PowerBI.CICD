@@ -25,7 +25,7 @@ jobs:
 
     - name: List changed PBIX files
       run: | 
-          git diff --name-only ${{ github.event.before }} ${{ github.event.after }} "*.pbix"
+          git diff --name-only ${{ github.event.before }} ${{ github.event.after }} --diff-filter=ACM "*.pbix"
     
     - name: Extract PBIX Metadata
       run: |

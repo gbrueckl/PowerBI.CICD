@@ -37,7 +37,7 @@ $workspace = Get-PowerBIWorkspace -Id $workspace_id
 #$pbix_files = Get-ChildItem -Path $(Join-Path $root_path "content" "PBIX_Files" "*.pbix")
 # get the changed .pbix files in the current push
 $changed_files = Join-Path $root_path "_tmp_changed_files.txt"
-$x = Start-Process "git" -ArgumentList @("diff", "--name-only", $git_event_before, $git_event_after, """*.pbix""") -Wait -PassThru -NoNewWindow -RedirectStandardOutput $changed_files
+$x = Start-Process "git" -ArgumentList @("diff", "--name-only", $git_event_before, $git_event_after, "--diff-filter=ACM", """*.pbix""") -Wait -PassThru -NoNewWindow -RedirectStandardOutput $changed_files
 #$x = Start-Process "git" -ArgumentList @("diff", "--name-only", "HEAD~2", """*.pbix""") -Wait -PassThru -NoNewWindow -RedirectStandardOutput $changed_files
 $pbix_files = Get-Content -Path $changed_files | ForEach-Object { Join-Path $root_path $_ | Get-Item}
 Remove-Item $changed_files
