@@ -37,10 +37,14 @@ $pbixFiles = Get-ChildItem -Path $(Join-Path $root_path "content" "PBIX_Files")
 foreach($pbixFile in $pbixFiles)
 {
 	$temp_name = "$($pbixFile.BaseName)-$(Get-Date -Format 'yyyyMMddTHHmmss')"
-	New-PowerBIReport -Path $pbixfile.FullName -Name $temp_name -WorkspaceId $workspace.Id
+	Write-Information "Uploading $($pbixfile.FullName) to $($workspace.Id)/$temp_name ... "
+	$report = New-PowerBIReport -Path $pbixfile.FullName -Name $temp_name -WorkspaceId $workspace.Id
+	Start-Sleep -Seconds 5
+	Write-Information "    Done!"
 
-	$dataset = Get-PowerBIDataset -WorkspaceId $workspace.Id -Name $temp_name
-	$connection_string = "powerbi://api.powerbi.com/v1.0/myorg/$($workspace.Name)"#;initial catalog=$($dataset.Name)"
+	Write-Information "Getting PowerBI dataset ..."
+	$dataset = Get-PowerBIDataset -WorkspaceId $workspace.Id | Where-Object { $_.Name -eq $temp_name}
+	$connection_string = "powerbi://api.powerbi.com/v1.0/myorg/$($workspace.Name);initial catalog=$($dataset.Name)"
 
 	$executable = Join-Path $root_path tools TabularEditor2 TabularEditor.exe
 
@@ -54,4 +58,9 @@ foreach($pbixFile in $pbixFiles)
 	$p = Start-Process -FilePath $executable -Wait -NoNewWindow -PassThru -ArgumentList $params
 
 	Write-Information $p.ExitCode
+
+	Write-Information "Removing temporary PowerBI report ..."
+	Remove-PowerBIReport -WorkspaceId $workspace.Id -Id $report.Id
+	Write-Information "Removing temporary PowerBI dataset ..."
+	Invoke-PowerBIRestMethod -Url "https://api.powerbi.com/v1.0/myorg/groups/$($workspace.Id)/datasets/$($dataset.Id)" -Method Delete
 }
