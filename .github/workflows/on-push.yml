@@ -18,11 +18,17 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+      with: 
+        fetch-depth: 0
+
+    - name: get file changes
+      run: | 
+          git diff --name-only ${{ github.event.before }} ${{ github.event.after }}
+
     - name: get committed files
       run: |
           git diff-tree --no-commit-id --name-only -r ${{ github.sha }}
     
-
     - name: Extract PBIX Metadata
       run: |
           ./src/Extract-PBIXMetadata.ps1
