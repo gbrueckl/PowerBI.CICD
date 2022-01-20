@@ -18,6 +18,11 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - name: get committed files
+      run: |
+          git diff-tree --no-commit-id --name-only -r ${{ github.sha }}
+    
+
     - name: Extract PBIX Metadata
       run: |
           ./src/Extract-PBIXMetadata.ps1
