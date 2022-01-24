@@ -1,4 +1,4 @@
-name: Post-Push workflow - Extract PBIX Metadata
+name: Post-Push workflow - Extract BIM from PBIX
 
 on:
   workflow_dispatch:
@@ -36,7 +36,7 @@ jobs:
       run: | 
           git diff --name-only ${{ github.event.before }} ${{ github.event.after }} --diff-filter=ACM "*.pbix"
     
-    - name: Extract PBIX Metadata
+    - name: Extract BIM from PBIX
       env:
         PBI_TENANT_ID: ${{ secrets.PBI_TENANT_ID }}
         PBI_CLIENT_ID: ${{ secrets.PBI_CLIENT_ID }}
@@ -158,11 +158,11 @@ jobs:
             }
           }
       shell: pwsh
-    - name: Push PBIX MetaData
+    - name: Push BIM Files
       run: |
-          git config --global user.name '${{ github.workflow }}'
-          git config --global user.email '${{ github.workflow }}@users.noreply.github.com'
+          git config --global user.name '${{ github.actor }}'
+          git config --global user.email '${{ github.actor }}@users.noreply.github.com'
           git add .
-          git commit -am "${{ github.workflow }} - PBIX changes by ${{ github.actor }}"
+          git commit -am "Automated extracton of BIM file from PBIX via ${{ github.workflow }} - original changes by ${{ github.actor }}"
           git push
 
