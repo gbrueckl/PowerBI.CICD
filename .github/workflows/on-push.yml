@@ -9,7 +9,7 @@ on:
 jobs:
   extract_pbix_metadata:
     runs-on: windows-latest
-    environment: PowerBI
+    environment: PowerBI UsernamePassword
 
     steps:
     - uses: actions/checkout@v2
@@ -158,6 +158,7 @@ jobs:
             }
           }
       shell: pwsh
+
     - name: Push BIM Files
       run: |
           git config --global user.name '${{ github.actor }}'
