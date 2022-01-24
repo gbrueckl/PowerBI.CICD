@@ -10,13 +10,6 @@ jobs:
   extract_pbix_metadata:
     runs-on: windows-latest
     environment: PowerBI
-    env:
-      PBI_TENANT_ID: ${{ secrets.PBI_TENANT_ID }}
-      PBI_CLIENT_ID: ${{ secrets.PBI_CLIENT_ID }}
-      PBI_CLIENT_SECRET: ${{ secrets.PBI_CLIENT_SECRET }}
-      PBI_PREMIUM_WORKSPACE_ID: ${{ secrets.PBI_PREMIUM_WORKSPACE_ID }}
-      GIT_EVENT_BEFORE: ${{ github.event.before }}
-      GIT_EVENT_AFTER: ${{ github.event.after }}
 
     steps:
     - uses: actions/checkout@v2
@@ -44,6 +37,13 @@ jobs:
           git diff --name-only ${{ github.event.before }} ${{ github.event.after }} --diff-filter=ACM "*.pbix"
     
     - name: Extract PBIX Metadata
+      env:
+        PBI_TENANT_ID: ${{ secrets.PBI_TENANT_ID }}
+        PBI_CLIENT_ID: ${{ secrets.PBI_CLIENT_ID }}
+        PBI_CLIENT_SECRET: ${{ secrets.PBI_CLIENT_SECRET }}
+        PBI_PREMIUM_WORKSPACE_ID: ${{ secrets.PBI_PREMIUM_WORKSPACE_ID }}
+        GIT_EVENT_BEFORE: ${{ github.event.before }}
+        GIT_EVENT_AFTER: ${{ github.event.after }}
       run: |
           # halt on first error
           $ErrorActionPreference = "Stop"
@@ -103,6 +103,15 @@ jobs:
             $dataset = $null
             try {
               Write-Information "Processing  $($pbix_file.FullName) ... "
+
+              Write-Information "Chekcing PBIX type (dataset or thin report) ..."
+              $zip = [IO.Compression.ZipFile]::OpenRead($pbix_file.FullName); 
+              if("DataModel" -notin $zip.Entries.Name)
+              {
+                Write-Information "No Datamodel found in $($pbix_file.Name) - assuming it is a thin report and continuing with next .PBIX file!"
+              }
+              $zip.Dispose()
+
               $temp_name = "$($pbix_file.BaseName)-$(Get-Date -Format 'yyyyMMddTHHmmss')"
               Write-Information "Uploading $($pbix_file.FullName) to $($workspace.Name)/$temp_name ... "
               $report = New-PowerBIReport -Path $pbix_file.FullName -Name $temp_name -WorkspaceId $workspace.Id

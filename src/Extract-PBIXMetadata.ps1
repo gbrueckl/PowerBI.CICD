@@ -56,6 +56,15 @@ foreach($pbix_file in $pbix_files)
 	$dataset = $null
 	try {
 		Write-Information "Processing  $($pbix_file.FullName) ... "
+
+		Write-Information "Chekcing PBIX type (dataset or thin report) ..."
+		$zip = [IO.Compression.ZipFile]::OpenRead($pbix_file.FullName); 
+		if("DataModel" -notin $zip.Entries.Name)
+		{
+			Write-Information "No Datamodel found in $($pbix_file.Name) - assuming it is a thin report and continuing with next .PBIX file!"
+		}
+		$zip.Dispose()
+
 		$temp_name = "$($pbix_file.BaseName)-$(Get-Date -Format 'yyyyMMddTHHmmss')"
 		Write-Information "Uploading $($pbix_file.FullName) to $($workspace.Name)/$temp_name ... "
 		$report = New-PowerBIReport -Path $pbix_file.FullName -Name $temp_name -WorkspaceId $workspace.Id
