@@ -64,6 +64,9 @@ foreach($pbix_file in $pbix_files)
 			Write-Information "No datamodel found in $($pbix_file.Name) - skipping further processing of this file!"
 			continue
 		}
+		else {
+			Write-Information "Datamodel found!"
+		}
 
 		$temp_name = "$($pbix_file.BaseName)-$(Get-Date -Format 'yyyyMMddTHHmmss')"
 		Write-Information "Uploading $($pbix_file.FullName) to $($workspace.Name)/$temp_name ... "
