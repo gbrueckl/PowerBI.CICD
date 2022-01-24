@@ -1,6 +1,6 @@
 {
-  "name": "File3-20220124T122408",
-  "id": "8d3f861a-3335-4e03-8131-e2b7ad4d17ed",
+  "name": "File3-20220124T124138",
+  "id": "c00912ed-cfed-4f73-96e8-0b9b5504d0aa",
   "compatibilityLevel": 1550,
   "model": {
     "culture": "en-US",
@@ -370,7 +370,7 @@
         "measures": [
           {
             "name": "Measure 2",
-            "expression": "4",
+            "expression": "7",
             "formatString": "0",
             "lineageTag": "68ce9040-848f-461a-9ebb-0eebaafa6337",
             "annotations": [
