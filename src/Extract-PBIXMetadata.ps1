@@ -3,14 +3,7 @@ $ErrorActionPreference = "Stop"
 # print Information stream
 $InformationPreference = "Continue"
 
-$root_path = Switch ($Host.name) {
-	'Visual Studio Code Host' { split-path $psEditor.GetEditorContext().CurrentFile.Path }
-	'Windows PowerShell ISE Host' { Split-Path -Path $psISE.CurrentFile.FullPath }
-	'ConsoleHost' { $PSScriptRoot }
-}
-
-$root_path = $root_path | Split-Path -Parent
-Push-Location $root_path
+$root_path = Get-Location
 
 Set-PSRepository PSGallery -InstallationPolicy Trusted
 Install-Module -Name MicrosoftPowerBIMgmt -Scope CurrentUser
