@@ -38,10 +38,12 @@ jobs:
     
     - name: Extract BIM from PBIX
       env:
+        PBI_PREMIUM_WORKSPACE_ID: ${{ secrets.PBI_PREMIUM_WORKSPACE_ID }}
         PBI_TENANT_ID: ${{ secrets.PBI_TENANT_ID }}
         PBI_CLIENT_ID: ${{ secrets.PBI_CLIENT_ID }}
         PBI_CLIENT_SECRET: ${{ secrets.PBI_CLIENT_SECRET }}
-        PBI_PREMIUM_WORKSPACE_ID: ${{ secrets.PBI_PREMIUM_WORKSPACE_ID }}
+        PBI_USER_NAME: ${{ secrets.PBI_USER_NAME }}
+        PBI_USER_PASSWORD: ${{ secrets.PBI_USER_PASSWORD }}
         GIT_EVENT_BEFORE: ${{ github.event.before }}
         GIT_EVENT_AFTER: ${{ github.event.after }}
       run: |
