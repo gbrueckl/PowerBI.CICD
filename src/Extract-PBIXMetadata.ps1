@@ -57,13 +57,13 @@ foreach($pbix_file in $pbix_files)
 	try {
 		Write-Information "Processing  $($pbix_file.FullName) ... "
 
-		Write-Information "Chekcing PBIX type (dataset or thin report) ..."
-		$zip = [IO.Compression.ZipFile]::OpenRead($pbix_file.FullName); 
-		if("DataModel" -notin $zip.Entries.Name)
+		Write-Information "Checking PBIX file contains a datamodel ..."
+		$zip_entries = [IO.Compression.ZipFile]::OpenRead($pbix_file.FullName).Entries.Name; 
+		if("DataModel" -notin $zip_entries)
 		{
-			Write-Information "No Datamodel found in $($pbix_file.Name) - assuming it is a thin report and continuing with next .PBIX file!"
+			Write-Information "No datamodel found in $($pbix_file.Name) - skipping further processing of this file!"
+			continue
 		}
-		$zip.Dispose()
 
 		$temp_name = "$($pbix_file.BaseName)-$(Get-Date -Format 'yyyyMMddTHHmmss')"
 		Write-Information "Uploading $($pbix_file.FullName) to $($workspace.Name)/$temp_name ... "
