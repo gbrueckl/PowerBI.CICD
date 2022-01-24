@@ -1,6 +1,6 @@
 {
-  "name": "File3-20220124T115907",
-  "id": "f5ac1974-7ead-45cb-9074-41773738909f",
+  "name": "File3-20220124T120234",
+  "id": "b5bd74d7-48fb-4f85-a324-684d26b00a8f",
   "compatibilityLevel": 1550,
   "model": {
     "culture": "en-US",
@@ -370,12 +370,13 @@
         "measures": [
           {
             "name": "Measure 2",
-            "expression": "\"I was changed again and again!!!!!!\"",
+            "expression": "3",
+            "formatString": "0",
             "lineageTag": "68ce9040-848f-461a-9ebb-0eebaafa6337",
             "annotations": [
               {
                 "name": "Format",
-                "value": "<Format Format=\"Text\" />"
+                "value": "<Format Format=\"NumberWhole\" Accuracy=\"0\" />"
               }
             ]
           }
