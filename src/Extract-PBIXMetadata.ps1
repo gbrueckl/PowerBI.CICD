@@ -18,23 +18,35 @@ Install-Module -Name MicrosoftPowerBIMgmt -Scope CurrentUser
 
 Import-Module -Name MicrosoftPowerBIMgmt
 
-$tenant_id = $env:PBI_TENANT_ID
-$client_id = $env:PBI_CLIENT_ID
-$client_secret = $env:PBI_CLIENT_SECRET
-$workspace_id = $env:PBI_WORKSPACE_ID
-
 $git_event_before = $env:GIT_EVENT_BEFORE
 $git_event_after = $env:GIT_EVENT_AFTER
 
-# Convert to SecureString
-[securestring]$sec_client_secret = ConvertTo-SecureString $client_secret -AsPlainText -Force
-[pscredential]$credential = New-Object System.Management.Automation.PSCredential ($client_id, $sec_client_secret)
+$workspace_id = $env:PBI_PREMIUM_WORKSPACE_ID
 
-Connect-PowerBIServiceAccount -Credential $credential -ServicePrincipal -TenantId $tenant_id
+if((Test-Path 'env:PBI_TENANT_ID') -and (Test-Path 'env:PBI_CLIENT_SECRET') -and (Test-Path 'env:PBI_CLIENT_ID')) {
+	$tenant_id = $env:PBI_TENANT_ID
+	$client_id = $env:PBI_CLIENT_ID
+	$client_secret = $env:PBI_CLIENT_SECRET
+	$login_info = "User ID=app:$client_id@$tenant_id;Password=$client_secret"
+
+	[securestring]$sec_client_secret = ConvertTo-SecureString $client_secret -AsPlainText -Force
+	[pscredential]$credential = New-Object System.Management.Automation.PSCredential ($client_id, $sec_client_secret)
+
+	Connect-PowerBIServiceAccount -Credential $credential -ServicePrincipal -TenantId $tenant_id
+}
+else {
+	$user_name = $env:PBI_USER_NAME
+	$user_password = $env:PBI_USER_PASSWORD
+	$login_info = "User ID=$user_name;Password=$user_password"
+
+	[securestring]$sec_user_password = ConvertTo-SecureString $user_password -AsPlainText -Force
+	[pscredential]$credential = New-Object System.Management.Automation.PSCredential ($user_name, $sec_user_password)
+
+	Connect-PowerBIServiceAccount -Credential $credential
+}
 
 $workspace = Get-PowerBIWorkspace -Id $workspace_id
 
-#$pbix_files = Get-ChildItem -Path $(Join-Path $root_path "content" "PBIX_Files" "*.pbix")
 # get the changed .pbix files in the current push
 $changed_files = Join-Path $root_path "_tmp_changed_files.txt"
 $x = Start-Process "git" -ArgumentList @("diff", "--name-only", $git_event_before, $git_event_after, "--diff-filter=ACM", """*.pbix""") -Wait -PassThru -NoNewWindow -RedirectStandardOutput $changed_files
@@ -60,9 +72,9 @@ foreach($pbix_file in $pbix_files)
 	$executable = Join-Path $root_path tools TabularEditor2 TabularEditor.exe
 
 	$params = @(
-		"""Provider=MSOLAP;Data Source=$connection_string;User ID=app:$client_id@$tenant_id;Password=$client_secret"""
+		"""Provider=MSOLAP;Data Source=$connection_string;$login_info"""
 		"""$($dataset.Name)"""
-		"-FOLDER $(Join-Path $pbix_file.DirectoryName $pbix_file.BaseName '')"
+		"-BIM $(Join-Path $pbix_file.DirectoryName $pbix_file.BaseName).database.json" 
 	)
 
 	Write-Information "$executable $params"
@@ -75,6 +87,3 @@ foreach($pbix_file in $pbix_files)
 	Write-Information "Removing temporary PowerBI dataset ..."
 	Invoke-PowerBIRestMethod -Url "https://api.powerbi.com/v1.0/myorg/groups/$($workspace.Id)/datasets/$($dataset.Id)" -Method Delete
 }
-
-
-$stdOut
