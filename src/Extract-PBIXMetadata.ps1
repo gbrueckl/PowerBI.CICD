@@ -15,7 +15,7 @@ $git_event_after = $env:GIT_EVENT_AFTER
 
 $workspace_id = $env:PBI_PREMIUM_WORKSPACE_ID
 
-if((Test-Path 'env:PBI_TENANT_ID') -and (Test-Path 'env:PBI_CLIENT_SECRET') -and (Test-Path 'env:PBI_CLIENT_ID')) {
+if($env:PBI_TENANT_ID -and $env:PBI_CLIENT_ID -and $env:PBI_CLIENT_SECRET) {
 	Write-Information "Using Service Principal authentication!"
 	$tenant_id = $env:PBI_TENANT_ID
 	$client_id = $env:PBI_CLIENT_ID
