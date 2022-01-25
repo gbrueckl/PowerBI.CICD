@@ -1,6 +1,6 @@
 {
-  "name": "File3-20220124T202635",
-  "id": "9a3c1ea9-bc23-409f-a54f-87be9ef1f1e8",
+  "name": "AdventureWorksDW2014_Simple-20220124T202554",
+  "id": "2fa4a043-241a-4524-8613-a2d3c5422aa1",
   "compatibilityLevel": 1550,
   "model": {
     "culture": "en-US",
@@ -365,20 +365,6 @@
                 "    #\"Removed Columns\""
               ]
             }
-          }
-        ],
-        "measures": [
-          {
-            "name": "Measure 2",
-            "expression": "7",
-            "formatString": "0",
-            "lineageTag": "68ce9040-848f-461a-9ebb-0eebaafa6337",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"NumberWhole\" Accuracy=\"0\" />"
-              }
-            ]
           }
         ],
         "annotations": [
@@ -1542,7 +1528,7 @@
         "measures": [
           {
             "name": "Measure",
-            "expression": "2",
+            "expression": "4",
             "formatString": "0",
             "lineageTag": "b2b05fc4-5284-44e4-9a25-df30c568d5cc",
             "annotations": [

@@ -1,6 +1,6 @@
 {
-  "name": "File3-20220124T202635",
-  "id": "9a3c1ea9-bc23-409f-a54f-87be9ef1f1e8",
+  "name": "Small-20220124T202704",
+  "id": "b486d237-5f7c-43f2-92c5-43a2b2b260b7",
   "compatibilityLevel": 1550,
   "model": {
     "culture": "en-US",
@@ -369,14 +369,13 @@
         ],
         "measures": [
           {
-            "name": "Measure 2",
-            "expression": "7",
-            "formatString": "0",
-            "lineageTag": "68ce9040-848f-461a-9ebb-0eebaafa6337",
+            "name": "Small Measure",
+            "expression": "\"I changed this!\"",
+            "lineageTag": "c76f5829-cfb7-4590-8449-295887c871c0",
             "annotations": [
               {
                 "name": "Format",
-                "value": "<Format Format=\"NumberWhole\" Accuracy=\"0\" />"
+                "value": "<Format Format=\"Text\" />"
               }
             ]
           }
