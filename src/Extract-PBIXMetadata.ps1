@@ -51,7 +51,7 @@ if ($git_trigger_name -eq "push") {
 }
 elseif ($git_trigger_name -eq "workflow_dispatch") {
 	# get all .pbix files in the current repository
-	$pbix_files = Get-ChildItem -Path $workflow_dispatch_path_filter -Recurse -Filter "*.pbix" -File
+	$pbix_files = Get-ChildItem -Path (Join-Path (Get-Location) $workflow_dispatch_path_filter) -Recurse -Filter "*.pbix" -File
 }
 else {
 	Write-Error "Invalid Trigger!"
