@@ -2,6 +2,10 @@ name: Post-Push workflow - Extract BIM from PBIX
 
 on:
   workflow_dispatch:
+    inputs:
+      path_filter:
+        description: 'Path of PBIX files to process.'     
+        required: false
   push:
     paths:
     - '**/*.pbix'
@@ -37,6 +41,7 @@ jobs:
         GIT_EVENT_BEFORE: ${{ github.event.before }}
         GIT_EVENT_AFTER: ${{ github.event.after }}
         GIT_TRIGGER_NAME: ${{ github.event_name }}
+        WORKFLOW_DISPATCH_PATH_FILTER: ${{ github.event.inputs.path_filter }}
         PBI_PREMIUM_WORKSPACE_ID: ${{ secrets.PBI_PREMIUM_WORKSPACE_ID }}
         PBI_TENANT_ID: ${{ secrets.PBI_TENANT_ID }}
         PBI_CLIENT_ID: ${{ secrets.PBI_CLIENT_ID }}
@@ -61,6 +66,7 @@ jobs:
           $git_event_after = $env:GIT_EVENT_AFTER
           $git_trigger_name = $env:GIT_TRIGGER_NAME
           $workspace_id = $env:PBI_PREMIUM_WORKSPACE_ID
+          $workflow_dispatch_path_filter = $env:WORKFLOW_DISPATCH_PATH_FILTER
 
           if ($env:PBI_TENANT_ID -and $env:PBI_CLIENT_ID -and $env:PBI_CLIENT_SECRET) {
             Write-Information "Using Service Principal authentication!"
@@ -97,7 +103,7 @@ jobs:
           }
           elseif ($git_trigger_name -eq "workflow_dispatch") {
             # get all .pbix files in the current repository
-            $pbix_files = Get-ChildItem -Recurse -Filter "*.pbix"
+            $pbix_files = Get-ChildItem -Path $workflow_dispatch_path_filter -Recurse -Filter "*.pbix" -File
           }
           else {
             Write-Error "Invalid Trigger!"

@@ -14,6 +14,7 @@ $git_event_before = $env:GIT_EVENT_BEFORE
 $git_event_after = $env:GIT_EVENT_AFTER
 $git_trigger_name = $env:GIT_TRIGGER_NAME
 $workspace_id = $env:PBI_PREMIUM_WORKSPACE_ID
+$workflow_dispatch_path_filter = $env:WORKFLOW_DISPATCH_PATH_FILTER
 
 if ($env:PBI_TENANT_ID -and $env:PBI_CLIENT_ID -and $env:PBI_CLIENT_SECRET) {
 	Write-Information "Using Service Principal authentication!"
@@ -50,7 +51,7 @@ if ($git_trigger_name -eq "push") {
 }
 elseif ($git_trigger_name -eq "workflow_dispatch") {
 	# get all .pbix files in the current repository
-	$pbix_files = Get-ChildItem -Recurse -Filter "*.pbix"
+	$pbix_files = Get-ChildItem -Path $workflow_dispatch_path_filter -Recurse -Filter "*.pbix" -File
 }
 else {
 	Write-Error "Invalid Trigger!"
