@@ -1,4 +1,4 @@
-name: Post-Push workflow - Extract BIM from PBIX
+name: PBIX to BIM
 
 on:
   workflow_dispatch:
@@ -57,6 +57,7 @@ jobs:
           $InformationPreference = "Continue"
 
           $root_path = (Get-Location).Path
+          Write-Information "Working Directory: $root_path"
 
           Set-PSRepository PSGallery -InstallationPolicy Trusted
           Install-Module -Name MicrosoftPowerBIMgmt -Scope CurrentUser
@@ -65,7 +66,8 @@ jobs:
 
           $git_event_before = $env:GIT_EVENT_BEFORE
           $git_event_after = $env:GIT_EVENT_AFTER
-          $triggered_by = $env:GIT_TRIGGER_NAME
+          # to work with Github and Azure DevOps we combine both environment variables
+          $triggered_by = $env:BUILD_REASON + $env:GIT_TRIGGER_NAME
           $workspace_id = $env:PBI_PREMIUM_WORKSPACE_ID
           $manual_trigger_path_filter = $env:MANUAL_TRIGGER_PATH_FILTER
 
@@ -96,12 +98,13 @@ jobs:
           $workspace = Get-PowerBIWorkspace -Id $workspace_id
 
           Write-Information "Triggered By: $triggered_by"
-          if ($triggered_by -eq "push") {
+          if ($triggered_by -like "*CI" -or $triggered_by eq "push") {
             # get the changed .pbix files in the current push
+            # this code differs between Github and Azure DevOps !
             $pbix_files = $(git diff --name-only $git_event_before $git_event_after --diff-filter=ACM "*.pbix")
             $pbix_files = $pbix_files | ForEach-Object { Join-Path $root_path $_ | Get-Item }
           }
-          elseif ($triggered_by -eq "workflow_dispatch") {
+          elseif ($triggered_by -eq "Manual" or $triggered_by eq "workflow_dispatch") {
             # get all .pbix files in the current repository
             $pbix_files = Get-ChildItem -Path (Join-Path $root_path $manual_trigger_path_filter) -Recurse -Filter "*.pbix" -File
           }
@@ -111,14 +114,14 @@ jobs:
 
           Write-Information "PBIX files to be processed: $($pbix_files.Length)"
           $indention = "`t"
-          foreach ($pbix_file in $pbix_files) { 
+          foreach ($pbix_file in $pbix_files) {
             $report = $null
             $dataset = $null
             try {
               Write-Information "Processing  $($pbix_file.FullName) ... "
 
               Write-Information "$indention Checking if PBIX file contains a datamodel ..."
-              $zip_entries = [IO.Compression.ZipFile]::OpenRead($pbix_file.FullName).Entries.Name; 
+              $zip_entries = [IO.Compression.ZipFile]::OpenRead($pbix_file.FullName).Entries.Name;
               if ("DataModel" -notin $zip_entries) {
                 Write-Information "$indention No datamodel found in $($pbix_file.Name) - skipping further processing of this file!"
                 continue
@@ -137,6 +140,7 @@ jobs:
               $dataset = Get-PowerBIDataset -WorkspaceId $workspace.Id | Where-Object { $_.Name -eq $temp_name }
               $connection_string = "powerbi://api.powerbi.com/v1.0/myorg/$($workspace.Name);initial catalog=$($dataset.Name)"
 
+              Write-Information "$indention Extracting metadata (BIM) ..."
               $executable = Join-Path $root_path TabularEditor.exe
               $output_path = "$(Join-Path $pbix_file.DirectoryName $pbix_file.BaseName).database.json"
               $params = @(
@@ -152,7 +156,7 @@ jobs:
                 Write-Error "$indention Failed to extract .bim file from $($dataset.WebUrl)!"
               }
 
-              Write-Information "Created initial BIM-file ($output_path), overwriting `name` and `id` properties now ..."
+              Write-Information "Created initial BIM-file ($output_path)`n$indention Overwriting `name` and `id` properties now ..."
 
               # need to overwrite id and name as they are taken from the temporary dataset
               $bim_json = Get-Content $output_path | ConvertFrom-Json
