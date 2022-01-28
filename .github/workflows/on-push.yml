@@ -98,14 +98,8 @@ jobs:
           Write-Information "Triggered By: $triggered_by"
           if ($triggered_by -eq "push") {
             # get the changed .pbix files in the current push
-            $changed_files = Join-Path $root_path "_tmp_changed_files.txt"
-            $x = Start-Process "git" -ArgumentList @("diff", "--name-only", $git_event_before, $git_event_after, "--diff-filter=ACM", """*.pbix""") -Wait -PassThru -NoNewWindow -RedirectStandardOutput $changed_files
-            $pbix_files = Get-Content -Path $changed_files | ForEach-Object { Join-Path $root_path $_ | Get-Item }
-            Remove-Item $changed_files
-            $pbix_files
             $pbix_files = $(git diff --name-only $git_event_before $git_event_after --diff-filter=ACM "*.pbix")
             $pbix_files = $pbix_files | ForEach-Object { Join-Path $root_path $_ | Get-Item }
-            $pbix_files
           }
           elseif ($triggered_by -eq "workflow_dispatch") {
             # get all .pbix files in the current repository
@@ -144,12 +138,11 @@ jobs:
               $connection_string = "powerbi://api.powerbi.com/v1.0/myorg/$($workspace.Name);initial catalog=$($dataset.Name)"
 
               $executable = Join-Path $root_path TabularEditor.exe
-
               $output_path = "$(Join-Path $pbix_file.DirectoryName $pbix_file.BaseName).database.json"
               $params = @(
                 """Provider=MSOLAP;Data Source=$connection_string;$login_info"""
                 """$($dataset.Name)"""
-                "-BIM $output_path" 
+                "-BIM ""$output_path""" 
               )
 
               Write-Information "$indention $executable $params"
@@ -160,7 +153,7 @@ jobs:
               }
 
               # need to overwrite id and name as they are taken from the temporary dataset
-              $bim_json = Get-Content $$output_path
+              $bim_json = Get-Content $output_path
               $bim_json.name = $pbix_file.BaseName
               $bim_json.id = $pbix_file.BaseName
               $bim_json | ConvertTo-Json -Depth 50 | Out-File $output_path
