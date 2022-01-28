@@ -12,9 +12,9 @@ Import-Module -Name MicrosoftPowerBIMgmt
 
 $git_event_before = $env:GIT_EVENT_BEFORE
 $git_event_after = $env:GIT_EVENT_AFTER
-$git_trigger_name = $env:GIT_TRIGGER_NAME
+$triggered_by = $env:GIT_TRIGGER_NAME
 $workspace_id = $env:PBI_PREMIUM_WORKSPACE_ID
-$workflow_dispatch_path_filter = $env:WORKFLOW_DISPATCH_PATH_FILTER
+$manual_trigger_path_filter = $env:MANUAL_TRIGGER_PATH_FILTER
 
 if ($env:PBI_TENANT_ID -and $env:PBI_CLIENT_ID -and $env:PBI_CLIENT_SECRET) {
 	Write-Information "Using Service Principal authentication!"
@@ -42,16 +42,17 @@ else {
 
 $workspace = Get-PowerBIWorkspace -Id $workspace_id
 
-if ($git_trigger_name -eq "push") {
+Write-Information "Triggered By: $triggered_by"
+if ($triggered_by -eq "push") {
 	# get the changed .pbix files in the current push
 	$changed_files = Join-Path $root_path "_tmp_changed_files.txt"
 	$x = Start-Process "git" -ArgumentList @("diff", "--name-only", $git_event_before, $git_event_after, "--diff-filter=ACM", """*.pbix""") -Wait -PassThru -NoNewWindow -RedirectStandardOutput $changed_files
 	$pbix_files = Get-Content -Path $changed_files | ForEach-Object { Join-Path $root_path $_ | Get-Item }
 	Remove-Item $changed_files
 }
-elseif ($git_trigger_name -eq "workflow_dispatch") {
+elseif ($triggered_by -eq "workflow_dispatch") {
 	# get all .pbix files in the current repository
-	$pbix_files = Get-ChildItem -Path (Join-Path $root_path $workflow_dispatch_path_filter) -Recurse -Filter "*.pbix" -File
+	$pbix_files = Get-ChildItem -Path (Join-Path $root_path $manual_trigger_path_filter) -Recurse -Filter "*.pbix" -File
 }
 else {
 	Write-Error "Invalid Trigger!"
@@ -87,10 +88,11 @@ foreach ($pbix_file in $pbix_files) {
 
 		$executable = Join-Path $root_path TabularEditor.exe
 
+		$output_path = "$(Join-Path $pbix_file.DirectoryName $pbix_file.BaseName).database.json"
 		$params = @(
 			"""Provider=MSOLAP;Data Source=$connection_string;$login_info"""
 			"""$($dataset.Name)"""
-			"-BIM $(Join-Path $pbix_file.DirectoryName $pbix_file.BaseName).database.json" 
+			"-BIM $output_path" 
 		)
 
 		Write-Information "$indention $executable $params"
@@ -99,9 +101,12 @@ foreach ($pbix_file in $pbix_files) {
 		if ($p.ExitCode -ne 0) {
 			Write-Error "$indention Failed to extract .bim file from $($dataset.WebUrl)!"
 		}
+
+		Write-Information "BIM-file written to $output_path"
 	}
 	catch {
-		
+		Write-Information "An error occurred:"
+        Write-Warning $_
 	}
 	finally {
 		if ($report -ne $null) {

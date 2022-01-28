@@ -1,6 +1,12 @@
 # PowerBI.CICD
 Template for Github/YAML action to extract metadata (.bim) from Power BI .pbix files on push automatically.
 
+# Github
+
+# Azure DevOps
+https://docs.microsoft.com/en-us/azure/devops/pipelines/scripts/git-commands?view=azure-devops&tabs=yaml#grant-version-control-permissions-to-the-build-service
+https://stackoverflow.com/questions/56541458/azure-pipeline-doest-allow-to-git-push-throwing-genericcontribute-permission
+
 # Environment Variables
 `PBI_PREMIUM_WORKSPACE_ID`: the unique ID of Power BI Premium workspace to use when uploading the `.pbix` files.
 The identity that you use (see below) has to have at least `Contributor` permissions on the workspace to upload the `.pbix` files.
