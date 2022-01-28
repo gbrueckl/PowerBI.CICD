@@ -104,6 +104,7 @@ jobs:
             Remove-Item $changed_files
             $pbix_files
             $pbix_files = $(git diff --name-only $git_event_before $git_event_after --diff-filter=ACM "*.pbix")
+            $pbix_files = $pbix_files | ForEach-Object { Join-Path $root_path $_ | Get-Item }
             $pbix_files
           }
           elseif ($triggered_by -eq "workflow_dispatch") {
@@ -157,6 +158,12 @@ jobs:
               if ($p.ExitCode -ne 0) {
                 Write-Error "$indention Failed to extract .bim file from $($dataset.WebUrl)!"
               }
+
+              # need to overwrite id and name as they are taken from the temporary dataset
+              $bim_json = Get-Content $$output_path
+              $bim_json.name = $pbix_file.BaseName
+              $bim_json.id = $pbix_file.BaseName
+              $bim_json | ConvertTo-Json -Depth 50 | Out-File $output_path
 
               Write-Information "BIM-file written to $output_path"
             }
