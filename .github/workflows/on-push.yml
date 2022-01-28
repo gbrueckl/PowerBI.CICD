@@ -152,8 +152,10 @@ jobs:
                 Write-Error "$indention Failed to extract .bim file from $($dataset.WebUrl)!"
               }
 
+              Write-Information "Created initial BIM-file ($output_path), overwriting `name` and `id` properties now ..."
+
               # need to overwrite id and name as they are taken from the temporary dataset
-              $bim_json = Get-Content $output_path
+              $bim_json = Get-Content $output_path | ConvertFrom-Json
               $bim_json.name = $pbix_file.BaseName
               $bim_json.id = $pbix_file.BaseName
               $bim_json | ConvertTo-Json -Depth 50 | Out-File $output_path
