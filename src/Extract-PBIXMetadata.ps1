@@ -44,12 +44,12 @@ else {
 $workspace = Get-PowerBIWorkspace -Id $workspace_id
 
 Write-Information "Triggered By: $triggered_by"
-if ($triggered_by -like "*CI" -or $triggered_by eq "push") {
+if ($triggered_by -like "*CI" -or $triggered_by -eq "push") {
 	# get the changed .pbix files in the current push
 	$pbix_files = $(git diff --name-only $git_event_before $git_event_after --diff-filter=ACM "*.pbix")
 	$pbix_files = $pbix_files | ForEach-Object { Join-Path $root_path $_ | Get-Item }
 }
-elseif ($triggered_by -eq "Manual" or $triggered_by eq "workflow_dispatch") {
+elseif ($triggered_by -eq "Manual" -or $triggered_by -eq "workflow_dispatch") {
 	# get all .pbix files in the current repository
 	$pbix_files = Get-ChildItem -Path (Join-Path $root_path $manual_trigger_path_filter) -Recurse -Filter "*.pbix" -File
 }
