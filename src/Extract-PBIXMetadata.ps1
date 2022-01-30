@@ -112,7 +112,7 @@ foreach ($pbix_file in $pbix_files) {
 			Write-Error "$indention Failed to extract .bim file from $($dataset.WebUrl)!"
 		}
 
-		Write-Information "Created initial BIM-file ($output_path)`n$indention Overwriting <name> and <id> properties now ..."
+		Write-Information "$indention Created initial BIM-file ($output_path)`n$indention Overwriting <name> and <id> properties now ..."
 
 		# need to overwrite id and name as they are taken from the temporary dataset
 		$bim_json = Get-Content $output_path | ConvertFrom-Json
@@ -120,7 +120,7 @@ foreach ($pbix_file in $pbix_files) {
 		$bim_json.id = $pbix_file.BaseName
 		$bim_json | ConvertTo-Json -Depth 50 | Out-File $output_path
 
-		Write-Information "BIM-file written to $output_path"
+		Write-Information "$indention BIM-file written to $output_path"
 	}
 	catch {
 		Write-Information "An error occurred:"
