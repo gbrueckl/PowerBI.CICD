@@ -49,7 +49,6 @@ jobs:
         PBI_CLIENT_SECRET: ${{ secrets.PBI_CLIENT_SECRET }}
         PBI_USER_NAME: ${{ secrets.PBI_USER_NAME }}
         PBI_USER_PASSWORD: ${{ secrets.PBI_USER_PASSWORD }}
-        
       run: |
           # halt on first error
           $ErrorActionPreference = "Stop"
