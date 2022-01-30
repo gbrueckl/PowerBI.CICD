@@ -64,10 +64,10 @@ steps:
           $commit_id_before = $changes.value[$changes.count - 1].id
           $commit_id_after = $changes.value[0].id
 
-          Write-Information "Commit ID before push: $commit_id_before"
+          Write-Information "Commit ID before push: $commit_id_before^!"
           Write-Information "Commit ID after push:  $commit_id_after"
 
-          Write-Host "##vso[task.setvariable variable=GIT_EVENT_BEFORE]$commit_id_before"
+          Write-Host "##vso[task.setvariable variable=GIT_EVENT_BEFORE]$commit_id_before^!"
           Write-Host "##vso[task.setvariable variable=GIT_EVENT_AFTER]$commit_id_after"
       }
       else {
@@ -140,8 +140,8 @@ steps:
       Write-Information "Getting changed .pbix files ..."
       if ($triggered_by -like "*CI" -or $triggered_by -eq "push") {
         # get the changed .pbix files in the current push
-        Write-Information "git diff --name-only $git_event_before^! $git_event_after --diff-filter=ACM ""*.pbix"""
-        $pbix_files = @($(git diff --name-only $git_event_before^! $git_event_after --diff-filter=ACM "*.pbix"))
+        Write-Information "git diff --name-only $git_event_before $git_event_after --diff-filter=ACM ""*.pbix"""
+        $pbix_files = @($(git diff --name-only $git_event_before $git_event_after --diff-filter=ACM "*.pbix"))
         $pbix_files = $pbix_files | ForEach-Object { Join-Path $root_path $_ | Get-Item }
       }
       elseif ($triggered_by -eq "Manual" -or $triggered_by -eq "workflow_dispatch") {
