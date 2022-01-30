@@ -14,7 +14,7 @@ on:
 jobs:
   extract_pbix_metadata:
     runs-on: windows-latest
-    environment: PowerBI UsernamePassword
+    environment: PowerBI UsernamePassword    # <-- change this to match your library/variable group
 
     steps:
     - uses: actions/checkout@v2
@@ -64,9 +64,11 @@ jobs:
 
           Import-Module -Name MicrosoftPowerBIMgmt
 
+          $indention = "`t"
+
           $git_event_before = $env:GIT_EVENT_BEFORE
           $git_event_after = $env:GIT_EVENT_AFTER
-          # to work with Github and Azure DevOps we combine both environment variables
+          # to work with Github and Azure DevOps we combine both environment variables (only one will be populated)
           $triggered_by = $env:BUILD_REASON + $env:GIT_TRIGGER_NAME
           $workspace_id = $env:PBI_PREMIUM_WORKSPACE_ID
           $manual_trigger_path_filter = $env:MANUAL_TRIGGER_PATH_FILTER
@@ -96,24 +98,31 @@ jobs:
           }
 
           $workspace = Get-PowerBIWorkspace -Id $workspace_id
+          Write-Information "Power BI Workspace: `n$($workspace | ConvertTo-Json)"
+
+          if (-not $workspace.IsOnDedicatedCapacity) {
+            Write-Error "The provided Workspace ID ($($workspace.id)) is not on Premium Capacity!"
+          }
 
           Write-Information "Triggered By: $triggered_by"
+          Write-Information "Getting changed .pbix files ..."
           if ($triggered_by -like "*CI" -or $triggered_by -eq "push") {
             # get the changed .pbix files in the current push
-            # this code differs between Github and Azure DevOps !
-            $pbix_files = $(git diff --name-only $git_event_before $git_event_after --diff-filter=ACM "*.pbix")
+            Write-Information "git diff --name-only $git_event_before^! $git_event_after --diff-filter=ACM ""*.pbix"""
+            $pbix_files = @($(git diff --name-only $git_event_before^! $git_event_after --diff-filter=ACM "*.pbix"))
             $pbix_files = $pbix_files | ForEach-Object { Join-Path $root_path $_ | Get-Item }
           }
           elseif ($triggered_by -eq "Manual" -or $triggered_by -eq "workflow_dispatch") {
             # get all .pbix files in the current repository
-            $pbix_files = Get-ChildItem -Path (Join-Path $root_path $manual_trigger_path_filter) -Recurse -Filter "*.pbix" -File
+            $pbix_files = @(Get-ChildItem -Path (Join-Path $root_path $manual_trigger_path_filter) -Recurse -Filter "*.pbix" -File)
           }
           else {
             Write-Error "Invalid Trigger!"
           }
 
-          Write-Information "PBIX files to be processed: $($pbix_files.Length)"
-          $indention = "`t"
+          Write-Information "Changed .pbix files ($($pbix_files.Length)):"
+          $pbix_files | ForEach-Object { Write-Information $indention$_.FullName }
+
           foreach ($pbix_file in $pbix_files) {
             $report = $null
             $dataset = $null
@@ -146,7 +155,7 @@ jobs:
               $params = @(
                 """Provider=MSOLAP;Data Source=$connection_string;$login_info"""
                 """$($dataset.Name)"""
-                "-BIM ""$output_path""" 
+                "-BIM ""$output_path"""
               )
 
               Write-Information "$indention $executable $params"
@@ -185,11 +194,12 @@ jobs:
           Write-Information "Finished!"
       shell: pwsh
 
-    - name: Push BIM Files
+    - name: Push BIM Files to Git repo
       run: |
           git config --global user.name '${{ github.actor }}'
           git config --global user.email '${{ github.actor }}@users.noreply.github.com'
           git add **/*.database.json
+          git status --porcelain
           git commit -am "Automated extracton of BIM file from PBIX via ${{ github.workflow }} - original changes by ${{ github.actor }}"
           git push
 

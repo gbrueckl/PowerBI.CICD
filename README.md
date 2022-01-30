@@ -1,15 +1,81 @@
 # PowerBI.CICD
-Template for Github/YAML action to extract metadata (.bim) from Power BI .pbix files on push automatically.
+This repository provides sampe YAML pipelines for Github and Azure DevOps which automatically extract the metadata (`.bim`, (TOM)[https://docs.microsoft.com/en-us/analysis-services/tom/introduction-to-the-tabular-object-model-tom-in-analysis-services-amo?view=asallproducts-allversions] whenever a Power BI Desktop file (`.pbix`) is pushed to the repository.
+The `.bim` file is stored next to the `.pbix` file but with the file extension `.database.json`.
 
-# Github
+The idea is to have a single YAML file that you can simply copy to your repository and run in CI/CD pipeline without any external dependencies.
 
-# Azure DevOps
-https://docs.microsoft.com/en-us/azure/devops/pipelines/scripts/git-commands?view=azure-devops&tabs=yaml#grant-version-control-permissions-to-the-build-service
-https://stackoverflow.com/questions/56541458/azure-pipeline-doest-allow-to-git-push-throwing-genericcontribute-permission
+# General workflow and steps
+## Triggers
+The pipeline is currently designed to extract the metadata on every push. So you can track every change that you do in your `.pbix` file also in the corresponding `.database.json` file and also to have a collection of all changes when creating the final pull request (PR).
+
+To avoid unnecessary executions we only run the pipeline when the changes contain at least one `.pbix` file by using the path-filter `'**/*.pbix'`.
+
+In addition to the automated trigger on push, the pipeline can also be executed manually. In this case you get prompted for a sub-path so you can decide for which `.pbix` you want to extract the metadata. (Default value is `/`)
+
+## Environment Variables
+
+## Checkout Repository
+
+## Download Tabular Editor
+The free versino of Tabular Editor 2 is used to extract the metadata from the deployed dataset so we need to download the tool first. It will be downloaded to the root-path of the repository.
+
+The script was originally taken from https://github.com/TabularEditor/DevOps/blob/main/Scripts/DownloadTE2.ps1
+
+The PowerShell code resides in the YAML file directly but is also present under `/src/Download-TabularEditor.ps1` as a reference and for local testing and development.
+
+## Get Commit IDs (Azure DevOps only)
+Azure DevOps does not provide built-in environment variables to get the commit ids before and after this git push so we need to get them via the Azure DevOps REST API (Get Build Changes)[https://docs.microsoft.com/en-us/rest/api/azure/devops/build/builds/get-build-changes?view=azure-devops-rest-7.19]. The oldest commit id is then stored as `GIT_EVENT_BEFORE` and the newest/current as `GIT_EVENT_AFTER` into the environment to be used by the next step.
+
+**Note:** We are using the same environment variables that are also set in the Github pipeline so we can use the very same PowerShell script for both engines.
+
+## Extract BIM from PBIX
+This is the root of the whole pipeline. The script downloads and installs the latest (MicrosoftPowerBIMgmt)[https://docs.microsoft.com/en-us/powershell/power-bi/overview?view=powerbi-ps9] PowerShell module and reads all relevant environment variables into local variables for easier use. Based on the set environment variables it connects to the Power BI service and the Premiums Workspace (`PBI_PREMIUM_WORKSPACE_ID`) either using Service Principal authentciation (`PBI_TENANT_ID`, `PBI_CLIENT_ID`, `PBI_CLIENT_SECRET`) or Username/Password authentication (`PBI_USER_NAME`, `PBI_USER_PASSWORD`).
+It then gets all changed `.pbix` files in the current push and iterates over them. For each file the following operations are executed:
+- Checks if the current `.pbix` file actually contains a datamodel. This is not the case for thin reports which simply connect to a remote dataset. If no datamodel was found, the script continues with the next `.pbix` file.
+- Create a temporary, unique name to be used when uploading the dataset to the PBI service
+- Upload the dataset to the PBI service
+- Get the metadata of the uploaded dataset (also ensuring it was uploaded successfully)
+- Run `TabularEditor.exe` and extract the metadata of the datamodel and store it in a local file `.database.json`
+- Update `name` and `id` of the `.database.json` file and replace the temporary values generated during the upload with the name of the original `.pbix` file
+
+The PowerShell code resides in the YAML file directly as inline script but is also present under `/src/Extract-PBIXMetadata.ps1` for reference and local testing and development.
+
+## Push BIM Files to Git repo
+The last step is to push the new/updated `.database.json` files back to the repositories current branch. 
+
+# Github Action
+The final YAML file for the Github Action can be found here: [pbix_to_bim.yaml](GitHub/pbix_to_bim.yaml)
+
+The mandatory (environment)[#environment_variables] variables can be specified using Github Secrets and/or Environments: (Set up Secrets in GitHub Action workflows)[https://github.com/Azure/actions-workflow-samples/blob/master/assets/create-secrets-for-GitHub-workflows.md]
+
+The reference to the secrets/environment has to be updated in the YAML file (line 17) then:
+```
+jobs:
+  extract_pbix_metadata:
+    runs-on: windows-latest
+    environment: PowerBI UsernamePassword    # <-- change this to match your library/variable group
+```
+
+# Azure DevOps Pipeline
+The final YAML file for the Azure DevOps Pipeline can be found here: [pbix_to_bim.yaml](Azure%20DevOps/pbix_to_bim.yaml)
+
+The mandatory (environment variables)[#environment_variables] can be specified using Github Secrets and/or Environments: 
+- (Set up Secrets in GitHub Action workflows)[https://github.com/Azure/actions-workflow-samples/blob/master/assets/create-secrets-for-GitHub-workflows.md]
+- (Add & use variable groups)[https://docs.microsoft.com/en-us/azure/devops/pipelines/library/variable-groups?view=azure-devops&tabs=yaml#create-a-variable-group] 
+
+The reference to the secrets/environment has to be updated in the YAML file (line 22) then:
+```
+variables:
+- group: PowerBI ServicePrincipal    # <-- change this to match your library/variable group
+```
+
+To allow the pipeline to also push changes to the git repository, the service user executing the pipeline needs to be added as a contributor of the repo:
+- (Grant version control permissions to the build service)[https://docs.microsoft.com/en-us/azure/devops/pipelines/scripts/git-commands?view=azure-devops&tabs=yaml#grant-version-control-permissions-to-the-build-service]
+- (Stack Overflow: Azure pipeline does't allow to git push throwing 'GenericContribute' permission is needed)[https://stackoverflow.com/questions/56541458/azure-pipeline-doest-allow-to-git-push-throwing-genericcontribute-permission]
 
 # Environment Variables
 `PBI_PREMIUM_WORKSPACE_ID`: the unique ID of Power BI Premium workspace to use when uploading the `.pbix` files.
-The identity that you use (see below) has to have at least `Contributor` permissions on the workspace to upload the `.pbix` files.
+The identity that you use (service principal or user - see below) has to have at least `Contributor` permissions on the workspace to upload the `.pbix` files.
 
 It supports two authentication methods, via a service principal or using username/password.
 Depending on the environment variables that are set up, one or the other is used where service principal authentication has precedence in case both are specified:
@@ -23,35 +89,12 @@ Depending on the environment variables that are set up, one or the other is used
 - `PBI_USER_NAME`: The username/email of the user to use for authentcation
 - `PBI_USER_PASSWORD`: The password of the user to use for authentcation
 
-# Specifying the environment
-As every workflow also this one does support multiple environment configurations. The environment you want to use must at least contain the variables as defined above and its name needs to be set in the `.yaml` file. Please see tag `environment:` and change it accordingly (line 12).
-
-# Triggers
-The workflow will be triggered whenever you push changes to the repository that contain at least one `.pbix` file.
-This change can be a newly added file or a modified/moved existing file.
-
-However, you can also manually trigger the workflow to extract the dataset metadata file from all `.pbix` files in the current repository.
-
-# Job Steps
-## Download Tabular Editor 2
-Tabular Editor 2 is used to extract the BIM file from a Power BI dataset deployed to a Power BI Premium workspace with XMLA endpoint enable. So we need to download the executable file before we can use it.
-The script was originally taken from https://github.com/TabularEditor/DevOps/blob/main/Scripts/DownloadTE2.ps1
-
-The PowerShell code resides in the YAML file directly but is also present under `/src/Download-TabularEditor.ps1` for local testing and development.
-
-## Extract BIM from PBIX
-Thats the heart of the action. It first gets all add/modified/moved `.pbix` files in the current push and iterates over them.
-For each file it is checked whether it contains a datamodel or not (e.g thin reports connected to a AAS instance or PBI dataset). If a datamodel is present, it will be uploaded to the PBI workspace defined by the environment variable `PBI_PREMIUM_WORKSPACE_ID`. To make sure there are no conflicts, a unique, temporary name for the report/dataset to be uploaded is created. Once the file is uploaded, the dataset that was deployed is retrieved again to get all its details. Based on them the connection string for the XMLA endpoint is generated and then passed to Tabular Editor which connects to it and downloads the definition of the data model into `*.database.json` file. Afterwards all artifacts are removed again from the PBI workspace.
-
-The PowerShell code resides in the YAML file directly but is also present under `/src/Extract-PBIXMetadata.ps1` for local testing and development.
-
-## Push BIM Files
-The last step is to push the current changes - the modified or added `*.database.json` files - back to the repository. The changes are pushed in the name of the author who did the intial push that triggered the action. The comment also gives some information about the workflow and the author.
-
-
 
 # Other references 
+**Power BI and Service Principals**
 - https://docs.microsoft.com/en-us/power-bi/admin/service-premium-service-principal
-- https://docs.tabulareditor.com/te2/Getting-Started.html
 - https://tabulareditor.github.io/2020/06/02/PBI-SP-Access.html
+
+**Tabular Editor 2**
+- https://docs.tabulareditor.com/te2/Getting-Started.html
 - https://docs.tabulareditor.com/te2/Command-line-Options.html
