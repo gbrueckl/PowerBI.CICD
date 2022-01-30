@@ -5,6 +5,7 @@ The `.bim` file is stored next to the `.pbix` file but with the file extension `
 This solves these very common problems with Power BI Desktop files `.pbix` and CI/CD pipelines:
 - automated tracking of what was changed in the data model
 - easy deployment to a Power BI Premium workspace using other tools like [Tabular Editor](https://tabulareditor.com/) or [ALM Toolkit](http://alm-toolkit.com/) from the created BIM file.
+- uses officially supported tools and interfaces only
 
 The idea is to have a single YAML file that you can simply copy&paste to your repository and run in CI/CD pipeline without any external dependencies. The only things that need to be configured are the credentials for connecting to the Power BI Service.
 
