@@ -107,8 +107,8 @@ jobs:
           Write-Information "Getting changed .pbix files ..."
           if ($triggered_by -like "*CI" -or $triggered_by -eq "push") {
             # get the changed .pbix files in the current push
-            Write-Information "git diff --name-only $git_event_before $git_event_after --diff-filter=ACM ""*.pbix"""
-            $pbix_files = @($(git diff --name-only $git_event_before $git_event_after --diff-filter=ACM "*.pbix"))
+            Write-Information "git diff --name-only $git_event_before^! $git_event_after --diff-filter=ACM ""*.pbix"""
+            $pbix_files = @($(git diff --name-only $git_event_before^! $git_event_after --diff-filter=ACM "*.pbix"))
             $pbix_files = $pbix_files | ForEach-Object { Join-Path $root_path $_ | Get-Item }
           }
           elseif ($triggered_by -eq "Manual" -or $triggered_by -eq "workflow_dispatch") {
@@ -164,7 +164,7 @@ jobs:
                 Write-Error "$indention Failed to extract .bim file from $($dataset.WebUrl)!"
               }
 
-              Write-Information "Created initial BIM-file ($output_path)`n$indention Overwriting `name` and `id` properties now ..."
+              Write-Information "Created initial BIM-file ($output_path)`n$indention Overwriting <name> and <id> properties now ..."
 
               # need to overwrite id and name as they are taken from the temporary dataset
               $bim_json = Get-Content $output_path | ConvertFrom-Json
