@@ -1,1 +1,1 @@
-[pbix_to_bim.yml](./../.github/workflows/pbix_to_bim.yml)
+The YAML file for the Github Action resides in the workflows-folder of this repository: [pbix_to_bim.yml](./../.github/workflows/pbix_to_bim.yml)
