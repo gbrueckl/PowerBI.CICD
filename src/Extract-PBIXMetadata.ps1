@@ -61,13 +61,13 @@ if ($triggered_by -like "*CI" -or $triggered_by -eq "push") {
 }
 elseif ($triggered_by -eq "Manual" -or $triggered_by -eq "workflow_dispatch") {
 	# get all .pbix files in the current repository
-	$pbix_files = @(Get-ChildItem -Path (Join-Path $root_path $manual_trigger_path_filter) -Recurse -Filter "*.pbix" -File)
+	$pbix_files = Get-ChildItem -Path (Join-Path $root_path $manual_trigger_path_filter) -Recurse -Filter "*.pbix" -File
 }
 else {
 	Write-Error "Invalid Trigger!"
 }
 
-Write-Information "Changed .pbix files ($($pbix_files.Length)):"
+Write-Information "Changed .pbix files ($($pbix_files.Count)):"
 $pbix_files | ForEach-Object { Write-Information $indention$_.FullName }
 
 foreach ($pbix_file in $pbix_files) {
