@@ -58,6 +58,13 @@ if ($triggered_by -like "*CI" -or $triggered_by -eq "push") {
 	Write-Information "git diff --name-only $git_event_before $git_event_after --diff-filter=ACM ""*.pbix"""
 	$pbix_files = @($(git diff --name-only $git_event_before $git_event_after --diff-filter=ACM "*.pbix"))
 	$pbix_files = $pbix_files | ForEach-Object { Join-Path $root_path $_ | Get-Item }
+
+	if ($pbix_files.Count -eq 0) {
+		Write-Error "Something went wrong! Could not find any changed .pbix files using the above 'git diff' command!"
+		Write-Information "Getting all .pbix files in the repo to be sure to get all changes!"
+		# get all .pbix files in the current repository
+		$pbix_files = Get-ChildItem -Path (Join-Path $root_path $manual_trigger_path_filter) -Recurse -Filter "*.pbix" -File
+	}
 }
 elseif ($triggered_by -eq "Manual" -or $triggered_by -eq "workflow_dispatch") {
 	# get all .pbix files in the current repository
@@ -123,7 +130,7 @@ foreach ($pbix_file in $pbix_files) {
 		Write-Information "$indention BIM-file written to $output_path"
 	}
 	catch {
-		Write-Information "An error occurred:"
+		Write-Warning "An error occurred:"
 		Write-Warning $_
 	}
 	finally {
