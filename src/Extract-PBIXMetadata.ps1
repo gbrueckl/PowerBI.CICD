@@ -60,7 +60,7 @@ if ($triggered_by -like "*CI" -or $triggered_by -eq "push") {
 	$pbix_files = $pbix_files | ForEach-Object { Join-Path $root_path $_ | Get-Item }
 
 	if ($pbix_files.Count -eq 0) {
-		Write-Error "Something went wrong! Could not find any changed .pbix files using the above 'git diff' command!"
+		Write-Warning "Something went wrong! Could not find any changed .pbix files using the above 'git diff' command!"
 		Write-Information "Getting all .pbix files in the repo to be sure to get all changes!"
 		# get all .pbix files in the current repository
 		$pbix_files = Get-ChildItem -Path (Join-Path $root_path $manual_trigger_path_filter) -Recurse -Filter "*.pbix" -File
