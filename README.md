@@ -11,32 +11,30 @@ The idea is to have a single YAML file that you can simply copy&paste to your re
 
 # General workflow and steps
 The repository contains a [.yml file for Github Actions and a YAML](.github/workflows/pbix_to_bim.yml) and a [.yaml file for Azure DevOps pipelines](Azure%20DevOps/pbix_to_bim.yaml) which are slightly different but in general contain the same setps:
-## Triggers
+
+### Triggers
 The pipeline is currently designed to extract the metadata on every push. So you can track every change that you do in your `.pbix` file also in the corresponding `.database.json` file and also to have a collection of all changes when creating the final pull request (PR).
 
 To avoid unnecessary executions we only run the pipeline when the changes contain at least one `.pbix` file by using the path-filter `'**/*.pbix'`.
 
 In addition to the automated trigger on push, the pipeline can also be executed manually. In this case you get prompted for a sub-path so you can decide for which `.pbix` you want to extract the metadata. (Default value is `/`)
 
-## Environment Variables
-
-
-## Checkout Repository
+### Checkout Repository
 Check-out the latest version of the repository after the current push.
 
-## Download Tabular Editor
+### Download Tabular Editor
 The free versino of Tabular Editor 2 is used to extract the metadata from the deployed dataset so we need to download the tool first. It will be downloaded to the root-path of the repository.
 
 The script was originally taken from https://github.com/TabularEditor/DevOps/blob/main/Scripts/DownloadTE2.ps1
 
 The PowerShell code resides in the YAML file directly but is also present under `/src/Download-TabularEditor.ps1` as a reference and for local testing and development.
 
-## Get Commit IDs (Azure DevOps only)
+### Get Commit IDs (Azure DevOps only)
 Azure DevOps does not provide built-in environment variables to get the commit ids before and after this git push so we need to get them via the Azure DevOps REST API [Get Build Changes)](ttps://docs.microsoft.com/en-us/rest/api/azure/devops/build/builds/get-build-changes?view=azure-devops-rest-7.19). The oldest commit id is then stored as `GIT_EVENT_BEFORE` and the newest/current as `GIT_EVENT_AFTER` into the environment to be used by the next step.
 
 **Note:** We are using the same environment variables that are also set in the Github pipeline so we can use the very same PowerShell script for both engines.
 
-## Extract BIM from PBIX
+### Extract BIM from PBIX
 This is the root of the whole pipeline. The script downloads and installs the latest [MicrosoftPowerBIMgmt](https://docs.microsoft.com/en-us/powershell/power-bi/overview?view=powerbi-ps9) PowerShell module and reads all relevant environment variables into local variables for easier use. Based on the set environment variables it connects to the Power BI service and the Premiums Workspace (`PBI_PREMIUM_WORKSPACE_ID`) either using Service Principal authentciation (`PBI_TENANT_ID`, `PBI_CLIENT_ID`, `PBI_CLIENT_SECRET`) or Username/Password authentication (`PBI_USER_NAME`, `PBI_USER_PASSWORD`).
 It then gets all changed `.pbix` files in the current push and iterates over them. For each file the following operations are executed:
 - Checks if the current `.pbix` file actually contains a datamodel. This is not the case for thin reports which simply connect to a remote dataset. If no datamodel was found, the script continues with the next `.pbix` file.
@@ -48,7 +46,7 @@ It then gets all changed `.pbix` files in the current push and iterates over the
 
 The PowerShell code resides in the YAML file directly as inline script but is also present under `/src/Extract-PBIXMetadata.ps1` for reference and local testing and development.
 
-## Push BIM Files to Git repo
+### Push BIM Files to Git repo
 The last step is to push the new/updated `.database.json` files back to the repositories current branch. 
 
 # Github Action
@@ -80,6 +78,7 @@ variables:
 To allow the pipeline to also push changes to the git repository, the service user executing the pipeline needs to be added as a contributor of the repo:
 - [Grant version control permissions to the build service](https://docs.microsoft.com/en-us/azure/devops/pipelines/scripts/git-commands?view=azure-devops&tabs=yaml#grant-version-control-permissions-to-the-build-service)
 - [Stack Overflow: Azure pipeline does't allow to git push throwing 'GenericContribute' permission is needed](https://stackoverflow.com/questions/56541458/azure-pipeline-doest-allow-to-git-push-throwing-genericcontribute-permission)
+
 
 # Environment Variables
 `PBI_PREMIUM_WORKSPACE_ID`: the unique ID of Power BI Premium workspace to use when uploading the `.pbix` files.
