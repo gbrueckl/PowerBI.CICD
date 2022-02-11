@@ -206,7 +206,7 @@ steps:
             Write-Error "$indention Failed to extract .bim file from $($dataset.WebUrl)!"
           }
 
-          Write-Information "$indention Created initial BIM-file ($output_path)`n$indention Overwriting `name` and `id` properties now ..."
+          Write-Information "$indention Created initial BIM-file ($output_path)`n$indention Overwriting <name> and <id> properties now ..."
 
           # need to overwrite id and name as they are taken from the temporary dataset
           $bim_json = Get-Content $output_path | ConvertFrom-Json
@@ -239,13 +239,16 @@ steps:
   displayName: Push BIM Files to Git repo
   inputs:
     script: |
+      SET _full_branch_name=$(Build.SourceBranch)
+      SET _full_branch_name=%_full_branch_name:refs/heads/=%
+      echo Branch Name: %_full_branch_name%
       git config --global user.name '$(Build.RequestedFor)'
       git config --global user.email '$(Build.RequestedForEMail)'
-      git checkout $(Build.SourceBranchName)
+      git checkout %_full_branch_name%
       git stash
       git pull
       git stash apply
       git add **/*.database.json
       git status --porcelain
       git commit -am "Automated extracton of BIM file from PBIX - original changes by $(Build.RequestedFor) \n[skip ci]"
-      git push origin HEAD:$(Build.SourceBranchName)
+      git push origin HEAD:%_full_branch_name%
