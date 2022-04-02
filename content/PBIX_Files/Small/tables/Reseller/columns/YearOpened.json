@@ -1,0 +1,30 @@
+{
+  "name": "YearOpened",
+  "dataType": "int64",
+  "sourceColumn": "YearOpened",
+  "formatString": "0",
+  "lineageTag": "8ae01adf-c2b6-4d5e-8a3c-6f96edd01312",
+  "summarizeBy": "sum",
+  "annotations": [
+    {
+      "name": "SummarizationSetBy",
+      "value": "Automatic"
+    },
+    {
+      "name": "Format",
+      "value": "<Format Format=\"NumberWhole\" Accuracy=\"0\" />"
+    },
+    {
+      "name": "DataTypeAtRefresh",
+      "value": "Int64#####not a type"
+    },
+    {
+      "name": "PBI_NameAtRefresh",
+      "value": "YearOpened"
+    },
+    {
+      "name": "PBI_WasHiddenAtRefresh",
+      "value": "False"
+    }
+  ]
+}

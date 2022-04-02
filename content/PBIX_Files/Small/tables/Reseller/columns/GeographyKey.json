@@ -1,0 +1,30 @@
+{
+  "name": "GeographyKey",
+  "dataType": "int64",
+  "sourceColumn": "GeographyKey",
+  "formatString": "0",
+  "lineageTag": "f2ea00b3-c3c0-4e0f-867e-6958189e017f",
+  "summarizeBy": "count",
+  "annotations": [
+    {
+      "name": "SummarizationSetBy",
+      "value": "Automatic"
+    },
+    {
+      "name": "Format",
+      "value": "<Format Format=\"NumberWhole\" Accuracy=\"0\" />"
+    },
+    {
+      "name": "DataTypeAtRefresh",
+      "value": "Int64#####not a type"
+    },
+    {
+      "name": "PBI_NameAtRefresh",
+      "value": "GeographyKey"
+    },
+    {
+      "name": "PBI_WasHiddenAtRefresh",
+      "value": "False"
+    }
+  ]
+}

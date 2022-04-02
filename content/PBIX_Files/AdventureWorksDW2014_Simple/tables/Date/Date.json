@@ -1,0 +1,35 @@
+{
+  "name": "Date",
+  "lineageTag": "33f504fa-c238-4d4b-9e89-697863a4ea99",
+  "dataCategory": "Time",
+  "partitions": [
+    {
+      "name": "Date-bc50fbaf-c581-4baa-b9a8-eb2c9c845d0a",
+      "mode": "import",
+      "source": {
+        "type": "m",
+        "expression": [
+          "let",
+          "    Source = Sql.Database(\".\\v2017\", \"AdventureWorksDW2014\"),",
+          "    dbo_DimDate = Source{[Schema=\"dbo\",Item=\"DimDate\"]}[Data],",
+          "    #\"Removed Columns\" = Table.RemoveColumns(dbo_DimDate,{\"SpanishDayNameOfWeek\", \"FrenchDayNameOfWeek\", \"SpanishMonthName\", \"FrenchMonthName\", \"CalendarSemester\", \"FiscalQuarter\", \"FiscalYear\", \"FiscalSemester\", \"FactCallCenter\", \"FactCurrencyRate\", \"FactFinance\", \"FactInternetSales(DateKey)\", \"FactInternetSales(DateKey) 2\", \"FactInternetSales(DateKey) 3\", \"FactProductInventory\", \"FactResellerSales(DateKey)\", \"FactResellerSales(DateKey) 2\", \"FactResellerSales(DateKey) 3\", \"FactSalesQuota\", \"FactSurveyResponse\"})",
+          "in",
+          "    #\"Removed Columns\""
+        ]
+      }
+    }
+  ],
+  "annotations": [
+    {
+      "name": "PBI_DescriptionAtRefresh"
+    },
+    {
+      "name": "PBI_NavigationStepName",
+      "value": "Navigation"
+    },
+    {
+      "name": "PBI_ResultType",
+      "value": "Table"
+    }
+  ]
+}

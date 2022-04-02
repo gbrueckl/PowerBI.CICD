@@ -1,0 +1,30 @@
+{
+  "name": "DealerPrice",
+  "dataType": "decimal",
+  "sourceColumn": "DealerPrice",
+  "formatString": "\"€\"#,0.###############;(\"€\"#,0.###############);\"€\"#,0.###############",
+  "lineageTag": "3cda8638-9af6-4acf-9d95-b002332cf77c",
+  "summarizeBy": "sum",
+  "annotations": [
+    {
+      "name": "SummarizationSetBy",
+      "value": "Automatic"
+    },
+    {
+      "name": "Format",
+      "value": "<Format Format=\"CurrencyGeneral\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"€ English (United States)\" Symbol=\"€\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+    },
+    {
+      "name": "DataTypeAtRefresh",
+      "value": "Decimal#####not a type"
+    },
+    {
+      "name": "PBI_NameAtRefresh",
+      "value": "DealerPrice"
+    },
+    {
+      "name": "PBI_WasHiddenAtRefresh",
+      "value": "False"
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "name": "Reseller",
+  "lineageTag": "b3262117-b8f9-4ab2-8493-53bc35802f42",
+  "partitions": [
+    {
+      "name": "Reseller-81fae9f1-d2b1-4fc6-943c-114bd77e9410",
+      "mode": "import",
+      "source": {
+        "type": "m",
+        "expression": [
+          "let",
+          "    Source = Sql.Database(\".\\v2017\", \"AdventureWorksDW2014\"),",
+          "    dbo_DimReseller = Source{[Schema=\"dbo\",Item=\"DimReseller\"]}[Data],",
+          "    #\"Removed Columns\" = Table.RemoveColumns(dbo_DimReseller,{\"Phone\", \"AddressLine1\", \"AddressLine2\", \"MinPaymentType\", \"MinPaymentAmount\", \"DimGeography\", \"FactResellerSales\"})",
+          "in",
+          "    #\"Removed Columns\""
+        ]
+      }
+    }
+  ],
+  "annotations": [
+    {
+      "name": "PBI_DescriptionAtRefresh"
+    },
+    {
+      "name": "PBI_NavigationStepName",
+      "value": "Navigation"
+    },
+    {
+      "name": "PBI_ResultType",
+      "value": "Table"
+    }
+  ]
+}

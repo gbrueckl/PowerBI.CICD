@@ -1,0 +1,30 @@
+{
+  "name": "WeekNumberOfYear",
+  "dataType": "int64",
+  "sourceColumn": "WeekNumberOfYear",
+  "formatString": "0",
+  "lineageTag": "e613e517-8085-449a-abb0-1bd2b06cf129",
+  "summarizeBy": "sum",
+  "annotations": [
+    {
+      "name": "SummarizationSetBy",
+      "value": "Automatic"
+    },
+    {
+      "name": "Format",
+      "value": "<Format Format=\"NumberWhole\" Accuracy=\"0\" />"
+    },
+    {
+      "name": "DataTypeAtRefresh",
+      "value": "Int64#####not a type"
+    },
+    {
+      "name": "PBI_NameAtRefresh",
+      "value": "WeekNumberOfYear"
+    },
+    {
+      "name": "PBI_WasHiddenAtRefresh",
+      "value": "False"
+    }
+  ]
+}

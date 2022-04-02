@@ -1,0 +1,30 @@
+{
+  "name": "ResellerKey",
+  "dataType": "int64",
+  "sourceColumn": "ResellerKey",
+  "formatString": "0",
+  "lineageTag": "0b004244-30bc-4149-b96b-12bdbf7d8b46",
+  "summarizeBy": "count",
+  "annotations": [
+    {
+      "name": "SummarizationSetBy",
+      "value": "Automatic"
+    },
+    {
+      "name": "Format",
+      "value": "<Format Format=\"NumberWhole\" Accuracy=\"0\" />"
+    },
+    {
+      "name": "DataTypeAtRefresh",
+      "value": "Int64#####not a type"
+    },
+    {
+      "name": "PBI_NameAtRefresh",
+      "value": "ResellerKey"
+    },
+    {
+      "name": "PBI_WasHiddenAtRefresh",
+      "value": "False"
+    }
+  ]
+}

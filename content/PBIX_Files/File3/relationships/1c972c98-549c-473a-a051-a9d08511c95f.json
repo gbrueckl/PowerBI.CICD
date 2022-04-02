@@ -1,0 +1,8 @@
+{
+  "name": "1c972c98-549c-473a-a051-a9d08511c95f",
+  "fromTable": "Product",
+  "fromColumn": "StartDate",
+  "toTable": "LocalDateTable_2cbdff4d-1305-40e6-b02c-1c5b082152e3",
+  "toColumn": "Date",
+  "joinOnDateBehavior": "datePartOnly"
+}

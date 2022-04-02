@@ -1,0 +1,60 @@
+{
+  "name": "LocalDateTable_18ad0fa3-6cff-4b0d-89a1-c8464fa6e42b",
+  "isHidden": true,
+  "showAsVariationsOnly": true,
+  "lineageTag": "05640be4-570c-403c-a5af-0c10a1d0675e",
+  "partitions": [
+    {
+      "name": "LocalDateTable_18ad0fa3-6cff-4b0d-89a1-c8464fa6e42b-b8467205-114c-47b5-898d-36d10054dc3a",
+      "mode": "import",
+      "source": {
+        "type": "calculated",
+        "expression": "Calendar(Date(Year(MIN('Product'[EndDate])), 1, 1), Date(Year(MAX('Product'[EndDate])), 12, 31))"
+      }
+    }
+  ],
+  "hierarchies": [
+    {
+      "name": "Date Hierarchy",
+      "lineageTag": "4340f568-d838-403e-89cd-36c683902d7d",
+      "levels": [
+        {
+          "name": "Year",
+          "ordinal": 0,
+          "column": "Year",
+          "lineageTag": "a34d3d91-b737-4a64-853b-0f77fd537bee"
+        },
+        {
+          "name": "Quarter",
+          "ordinal": 1,
+          "column": "Quarter",
+          "lineageTag": "91a0bd28-727e-468c-aab1-2ac48e22b9c0"
+        },
+        {
+          "name": "Month",
+          "ordinal": 2,
+          "column": "Month",
+          "lineageTag": "abfec8b4-7770-4808-99f0-8767bc0477fc"
+        },
+        {
+          "name": "Day",
+          "ordinal": 3,
+          "column": "Day",
+          "lineageTag": "2f194a86-73e3-4540-b8a3-fe4ffb696b92"
+        }
+      ],
+      "annotations": [
+        {
+          "name": "TemplateId",
+          "value": "DateHierarchy"
+        }
+      ]
+    }
+  ],
+  "annotations": [
+    {
+      "name": "__PBI_LocalDateTable",
+      "value": "true"
+    }
+  ]
+}

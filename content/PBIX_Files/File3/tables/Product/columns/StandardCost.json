@@ -1,0 +1,30 @@
+{
+  "name": "StandardCost",
+  "dataType": "decimal",
+  "sourceColumn": "StandardCost",
+  "formatString": "\"€\"#,0.###############;(\"€\"#,0.###############);\"€\"#,0.###############",
+  "lineageTag": "3f604e8b-414b-4469-bfd4-3ab4731c93b0",
+  "summarizeBy": "sum",
+  "annotations": [
+    {
+      "name": "SummarizationSetBy",
+      "value": "Automatic"
+    },
+    {
+      "name": "Format",
+      "value": "<Format Format=\"CurrencyGeneral\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"€ English (United States)\" Symbol=\"€\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+    },
+    {
+      "name": "DataTypeAtRefresh",
+      "value": "Decimal#####not a type"
+    },
+    {
+      "name": "PBI_NameAtRefresh",
+      "value": "StandardCost"
+    },
+    {
+      "name": "PBI_WasHiddenAtRefresh",
+      "value": "False"
+    }
+  ]
+}

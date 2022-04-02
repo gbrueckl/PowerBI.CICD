@@ -1,0 +1,29 @@
+{
+  "name": "ResellerName",
+  "dataType": "string",
+  "sourceColumn": "ResellerName",
+  "lineageTag": "d3e6cfab-ddf8-4102-b487-97f5059dcd78",
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "SummarizationSetBy",
+      "value": "Automatic"
+    },
+    {
+      "name": "Format",
+      "value": "<Format Format=\"Text\" />"
+    },
+    {
+      "name": "DataTypeAtRefresh",
+      "value": "String#####not a type"
+    },
+    {
+      "name": "PBI_NameAtRefresh",
+      "value": "ResellerName"
+    },
+    {
+      "name": "PBI_WasHiddenAtRefresh",
+      "value": "False"
+    }
+  ]
+}

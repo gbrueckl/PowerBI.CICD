@@ -1,0 +1,30 @@
+{
+  "name": "FirstOrderYear",
+  "dataType": "int64",
+  "sourceColumn": "FirstOrderYear",
+  "formatString": "0",
+  "lineageTag": "e53dbe4a-c1c4-45ac-ac8c-eac23f1081c7",
+  "summarizeBy": "sum",
+  "annotations": [
+    {
+      "name": "SummarizationSetBy",
+      "value": "Automatic"
+    },
+    {
+      "name": "Format",
+      "value": "<Format Format=\"NumberWhole\" Accuracy=\"0\" />"
+    },
+    {
+      "name": "DataTypeAtRefresh",
+      "value": "Int64#####not a type"
+    },
+    {
+      "name": "PBI_NameAtRefresh",
+      "value": "FirstOrderYear"
+    },
+    {
+      "name": "PBI_WasHiddenAtRefresh",
+      "value": "False"
+    }
+  ]
+}

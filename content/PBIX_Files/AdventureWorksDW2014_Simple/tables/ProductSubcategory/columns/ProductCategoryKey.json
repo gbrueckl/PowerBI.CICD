@@ -1,0 +1,30 @@
+{
+  "name": "ProductCategoryKey",
+  "dataType": "int64",
+  "sourceColumn": "ProductCategoryKey",
+  "formatString": "0",
+  "lineageTag": "012578b8-b0cb-47b5-bd05-678d594dae40",
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "SummarizationSetBy",
+      "value": "Automatic"
+    },
+    {
+      "name": "Format",
+      "value": "<Format Format=\"NumberWhole\" Accuracy=\"0\" />"
+    },
+    {
+      "name": "DataTypeAtRefresh",
+      "value": "Int64#####not a type"
+    },
+    {
+      "name": "PBI_NameAtRefresh",
+      "value": "ProductCategoryKey"
+    },
+    {
+      "name": "PBI_WasHiddenAtRefresh",
+      "value": "False"
+    }
+  ]
+}

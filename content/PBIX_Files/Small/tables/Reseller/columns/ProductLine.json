@@ -1,0 +1,29 @@
+{
+  "name": "ProductLine",
+  "dataType": "string",
+  "sourceColumn": "ProductLine",
+  "lineageTag": "5ee883e4-d68a-48c9-a6cf-7691964460e1",
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "SummarizationSetBy",
+      "value": "Automatic"
+    },
+    {
+      "name": "Format",
+      "value": "<Format Format=\"Text\" />"
+    },
+    {
+      "name": "DataTypeAtRefresh",
+      "value": "String#####not a type"
+    },
+    {
+      "name": "PBI_NameAtRefresh",
+      "value": "ProductLine"
+    },
+    {
+      "name": "PBI_WasHiddenAtRefresh",
+      "value": "False"
+    }
+  ]
+}

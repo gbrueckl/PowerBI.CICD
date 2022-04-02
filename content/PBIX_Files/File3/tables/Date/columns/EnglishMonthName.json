@@ -1,0 +1,29 @@
+{
+  "name": "EnglishMonthName",
+  "dataType": "string",
+  "sourceColumn": "EnglishMonthName",
+  "lineageTag": "2cea6a2f-cbe2-4e2b-9df4-b86da75f424d",
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "SummarizationSetBy",
+      "value": "Automatic"
+    },
+    {
+      "name": "Format",
+      "value": "<Format Format=\"Text\" />"
+    },
+    {
+      "name": "DataTypeAtRefresh",
+      "value": "String#####not a type"
+    },
+    {
+      "name": "PBI_NameAtRefresh",
+      "value": "EnglishMonthName"
+    },
+    {
+      "name": "PBI_WasHiddenAtRefresh",
+      "value": "False"
+    }
+  ]
+}

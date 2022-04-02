@@ -1,0 +1,30 @@
+{
+  "name": "NumberEmployees",
+  "dataType": "int64",
+  "sourceColumn": "NumberEmployees",
+  "formatString": "0",
+  "lineageTag": "f440d5c0-9994-429d-8718-468ea03e1fc3",
+  "summarizeBy": "sum",
+  "annotations": [
+    {
+      "name": "SummarizationSetBy",
+      "value": "Automatic"
+    },
+    {
+      "name": "Format",
+      "value": "<Format Format=\"NumberWhole\" Accuracy=\"0\" />"
+    },
+    {
+      "name": "DataTypeAtRefresh",
+      "value": "Int64#####not a type"
+    },
+    {
+      "name": "PBI_NameAtRefresh",
+      "value": "NumberEmployees"
+    },
+    {
+      "name": "PBI_WasHiddenAtRefresh",
+      "value": "False"
+    }
+  ]
+}

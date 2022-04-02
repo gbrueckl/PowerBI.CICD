@@ -1,0 +1,29 @@
+{
+  "name": "EnglishDayNameOfWeek",
+  "dataType": "string",
+  "sourceColumn": "EnglishDayNameOfWeek",
+  "lineageTag": "80c1fda6-0b1d-4f1d-baf4-4d2cd9ccdaca",
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "SummarizationSetBy",
+      "value": "Automatic"
+    },
+    {
+      "name": "Format",
+      "value": "<Format Format=\"Text\" />"
+    },
+    {
+      "name": "DataTypeAtRefresh",
+      "value": "String#####not a type"
+    },
+    {
+      "name": "PBI_NameAtRefresh",
+      "value": "EnglishDayNameOfWeek"
+    },
+    {
+      "name": "PBI_WasHiddenAtRefresh",
+      "value": "False"
+    }
+  ]
+}

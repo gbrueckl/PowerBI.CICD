@@ -1,0 +1,29 @@
+{
+  "name": "EnglishProductName",
+  "dataType": "string",
+  "sourceColumn": "EnglishProductName",
+  "lineageTag": "5f63cc3f-2bc4-46fd-9e08-cbc20d128109",
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "SummarizationSetBy",
+      "value": "Automatic"
+    },
+    {
+      "name": "Format",
+      "value": "<Format Format=\"Text\" />"
+    },
+    {
+      "name": "DataTypeAtRefresh",
+      "value": "String#####not a type"
+    },
+    {
+      "name": "PBI_NameAtRefresh",
+      "value": "EnglishProductName"
+    },
+    {
+      "name": "PBI_WasHiddenAtRefresh",
+      "value": "False"
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "name": "DateTableTemplate_6f636788-28d2-459d-b0e1-7c48185d51e6",
+  "isHidden": true,
+  "isPrivate": true,
+  "lineageTag": "47ecf573-80c1-466f-9645-bf536bdcb0dd",
+  "partitions": [
+    {
+      "name": "DateTableTemplate_6f636788-28d2-459d-b0e1-7c48185d51e6-eafccd0c-a285-4b69-b6f8-d94493122d95",
+      "mode": "import",
+      "source": {
+        "type": "calculated",
+        "expression": "Calendar(Date(2015,1,1), Date(2015,1,1))"
+      }
+    }
+  ],
+  "hierarchies": [
+    {
+      "name": "Date Hierarchy",
+      "lineageTag": "01cedbaf-66d9-44e8-b6dc-0b38faeb55d1",
+      "levels": [
+        {
+          "name": "Year",
+          "ordinal": 0,
+          "column": "Year",
+          "lineageTag": "c21fadfe-6ccf-499c-8cd2-955cf5e94092"
+        },
+        {
+          "name": "Quarter",
+          "ordinal": 1,
+          "column": "Quarter",
+          "lineageTag": "65bdaf1c-5269-496b-a9ce-91c266d36f87"
+        },
+        {
+          "name": "Month",
+          "ordinal": 2,
+          "column": "Month",
+          "lineageTag": "ea8cc5ba-e839-49c2-a128-f70647483e68"
+        },
+        {
+          "name": "Day",
+          "ordinal": 3,
+          "column": "Day",
+          "lineageTag": "be75a6d7-91b3-41db-8a89-209951a5ca19"
+        }
+      ],
+      "annotations": [
+        {
+          "name": "TemplateId",
+          "value": "DateHierarchy"
+        }
+      ]
+    }
+  ],
+  "annotations": [
+    {
+      "name": "__PBI_TemplateDateTable",
+      "value": "true"
+    },
+    {
+      "name": "DefaultItem",
+      "value": "DateHierarchy"
+    }
+  ]
+}

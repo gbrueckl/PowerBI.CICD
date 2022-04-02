@@ -1,0 +1,30 @@
+{
+  "name": "SafetyStockLevel",
+  "dataType": "int64",
+  "sourceColumn": "SafetyStockLevel",
+  "formatString": "0",
+  "lineageTag": "7f75987a-0e75-477d-9537-1c958c3fb2de",
+  "summarizeBy": "sum",
+  "annotations": [
+    {
+      "name": "SummarizationSetBy",
+      "value": "Automatic"
+    },
+    {
+      "name": "Format",
+      "value": "<Format Format=\"NumberWhole\" Accuracy=\"0\" />"
+    },
+    {
+      "name": "DataTypeAtRefresh",
+      "value": "Int64#####not a type"
+    },
+    {
+      "name": "PBI_NameAtRefresh",
+      "value": "SafetyStockLevel"
+    },
+    {
+      "name": "PBI_WasHiddenAtRefresh",
+      "value": "False"
+    }
+  ]
+}

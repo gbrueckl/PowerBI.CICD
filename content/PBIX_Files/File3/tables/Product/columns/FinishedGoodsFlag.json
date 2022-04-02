@@ -1,0 +1,30 @@
+{
+  "name": "FinishedGoodsFlag",
+  "dataType": "boolean",
+  "sourceColumn": "FinishedGoodsFlag",
+  "formatString": "\"TRUE\";\"TRUE\";\"FALSE\"",
+  "lineageTag": "9ea6f783-f30a-4ad8-9e4b-9ed2470c5bc4",
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "SummarizationSetBy",
+      "value": "Automatic"
+    },
+    {
+      "name": "Format",
+      "value": "<Format Format=\"Boolean\" />"
+    },
+    {
+      "name": "DataTypeAtRefresh",
+      "value": "Boolean#####not a type"
+    },
+    {
+      "name": "PBI_NameAtRefresh",
+      "value": "FinishedGoodsFlag"
+    },
+    {
+      "name": "PBI_WasHiddenAtRefresh",
+      "value": "False"
+    }
+  ]
+}

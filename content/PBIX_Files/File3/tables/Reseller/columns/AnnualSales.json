@@ -1,0 +1,30 @@
+{
+  "name": "AnnualSales",
+  "dataType": "decimal",
+  "sourceColumn": "AnnualSales",
+  "formatString": "\"€\"#,0.###############;(\"€\"#,0.###############);\"€\"#,0.###############",
+  "lineageTag": "83c4a32c-fae8-4d79-b839-7bf8588b1ce6",
+  "summarizeBy": "sum",
+  "annotations": [
+    {
+      "name": "SummarizationSetBy",
+      "value": "Automatic"
+    },
+    {
+      "name": "Format",
+      "value": "<Format Format=\"CurrencyGeneral\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"€ English (United States)\" Symbol=\"€\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+    },
+    {
+      "name": "DataTypeAtRefresh",
+      "value": "Decimal#####not a type"
+    },
+    {
+      "name": "PBI_NameAtRefresh",
+      "value": "AnnualSales"
+    },
+    {
+      "name": "PBI_WasHiddenAtRefresh",
+      "value": "False"
+    }
+  ]
+}

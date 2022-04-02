@@ -1,0 +1,30 @@
+{
+  "name": "ListPrice",
+  "dataType": "decimal",
+  "sourceColumn": "ListPrice",
+  "formatString": "\"€\"#,0.###############;(\"€\"#,0.###############);\"€\"#,0.###############",
+  "lineageTag": "5c540ada-7c07-4f2f-8e98-c07f24c3b7ad",
+  "summarizeBy": "sum",
+  "annotations": [
+    {
+      "name": "SummarizationSetBy",
+      "value": "Automatic"
+    },
+    {
+      "name": "Format",
+      "value": "<Format Format=\"CurrencyGeneral\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"€ English (United States)\" Symbol=\"€\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+    },
+    {
+      "name": "DataTypeAtRefresh",
+      "value": "Decimal#####not a type"
+    },
+    {
+      "name": "PBI_NameAtRefresh",
+      "value": "ListPrice"
+    },
+    {
+      "name": "PBI_WasHiddenAtRefresh",
+      "value": "False"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "name": "Measure 2",
+  "expression": "24",
+  "formatString": "0",
+  "lineageTag": "68ce9040-848f-461a-9ebb-0eebaafa6337",
+  "annotations": [
+    {
+      "name": "Format",
+      "value": "<Format Format=\"NumberWhole\" Accuracy=\"0\" />"
+    }
+  ]
+}

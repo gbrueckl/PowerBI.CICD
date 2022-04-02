@@ -1,0 +1,30 @@
+{
+  "name": "OrderMonth",
+  "dataType": "int64",
+  "sourceColumn": "OrderMonth",
+  "formatString": "0",
+  "lineageTag": "76a4a8cf-aa16-4fa9-b1c6-22cb5de062c8",
+  "summarizeBy": "sum",
+  "annotations": [
+    {
+      "name": "SummarizationSetBy",
+      "value": "Automatic"
+    },
+    {
+      "name": "Format",
+      "value": "<Format Format=\"NumberWhole\" Accuracy=\"0\" />"
+    },
+    {
+      "name": "DataTypeAtRefresh",
+      "value": "Int64#####not a type"
+    },
+    {
+      "name": "PBI_NameAtRefresh",
+      "value": "OrderMonth"
+    },
+    {
+      "name": "PBI_WasHiddenAtRefresh",
+      "value": "False"
+    }
+  ]
+}

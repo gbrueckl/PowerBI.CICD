@@ -1,0 +1,30 @@
+{
+  "name": "MonthNumberOfYear",
+  "dataType": "int64",
+  "sourceColumn": "MonthNumberOfYear",
+  "formatString": "0",
+  "lineageTag": "dca4de72-e096-4d4c-979f-130106f7cfe4",
+  "summarizeBy": "sum",
+  "annotations": [
+    {
+      "name": "SummarizationSetBy",
+      "value": "Automatic"
+    },
+    {
+      "name": "Format",
+      "value": "<Format Format=\"NumberWhole\" Accuracy=\"0\" />"
+    },
+    {
+      "name": "DataTypeAtRefresh",
+      "value": "Int64#####not a type"
+    },
+    {
+      "name": "PBI_NameAtRefresh",
+      "value": "MonthNumberOfYear"
+    },
+    {
+      "name": "PBI_WasHiddenAtRefresh",
+      "value": "False"
+    }
+  ]
+}

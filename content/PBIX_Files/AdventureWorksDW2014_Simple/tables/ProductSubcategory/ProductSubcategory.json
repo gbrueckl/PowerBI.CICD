@@ -1,0 +1,34 @@
+{
+  "name": "ProductSubcategory",
+  "lineageTag": "0a665154-835f-47fd-85ab-0c3d47d6ff27",
+  "partitions": [
+    {
+      "name": "ProductSubcategory-c83fcdbb-e5fb-4f6e-84d7-fa00be51546a",
+      "mode": "import",
+      "source": {
+        "type": "m",
+        "expression": [
+          "let",
+          "    Source = Sql.Database(\".\\v2017\", \"AdventureWorksDW2014\"),",
+          "    dbo_DimProductCategory = Source{[Schema=\"dbo\",Item=\"DimProductSubcategory\"]}[Data],",
+          "    #\"Removed Columns\" = Table.RemoveColumns(dbo_DimProductCategory,{\"SpanishProductSubcategoryName\", \"FrenchProductSubcategoryName\", \"DimProduct\", \"DimProductCategory\"})",
+          "in",
+          "    #\"Removed Columns\""
+        ]
+      }
+    }
+  ],
+  "annotations": [
+    {
+      "name": "PBI_DescriptionAtRefresh"
+    },
+    {
+      "name": "PBI_NavigationStepName",
+      "value": "Navigation"
+    },
+    {
+      "name": "PBI_ResultType",
+      "value": "Table"
+    }
+  ]
+}

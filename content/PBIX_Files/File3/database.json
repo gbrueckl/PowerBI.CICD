@@ -1,0 +1,54 @@
+{
+  "name": "File3",
+  "id": "File3",
+  "compatibilityLevel": 1550,
+  "model": {
+    "culture": "en-US",
+    "dataAccessOptions": {
+      "legacyRedirects": true,
+      "returnErrorValuesAsNull": true
+    },
+    "defaultPowerBIDataSourceVersion": "powerBI_V3",
+    "sourceQueryCulture": "en-US",
+    "annotations": [
+      {
+        "name": "PBIDesktopVersion",
+        "value": "2.98.1004.0 (21.10)"
+      },
+      {
+        "name": "__PBI_TimeIntelligenceEnabled",
+        "value": "1"
+      },
+      {
+        "name": "PBI_QueryOrder",
+        "value": "[\"Date\",\"ProductCategory\",\"Product\",\"Reseller\",\"ProductSubcategory\"]"
+      },
+      {
+        "name": "TabularEditor_SerializeOptions",
+        "value": [
+          "{",
+          "    \"IgnoreInferredObjects\": true,",
+          "    \"IgnoreInferredProperties\": true,",
+          "    \"IgnoreTimestamps\": true,",
+          "    \"SplitMultilineStrings\": true,",
+          "    \"PrefixFilenames\": false,",
+          "    \"LocalTranslations\": false,",
+          "    \"LocalPerspectives\": false,",
+          "    \"LocalRelationships\": false,",
+          "    \"Levels\": [",
+          "        \"Data Sources\",",
+          "        \"Perspectives\",",
+          "        \"Relationships\",",
+          "        \"Roles\",",
+          "        \"Tables\",",
+          "        \"Tables/Columns\",",
+          "        \"Tables/Measures\",",
+          "        \"Translations\"",
+          "    ]",
+          "}",
+          ""
+        ]
+      }
+    ]
+  }
+}

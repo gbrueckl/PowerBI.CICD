@@ -1,0 +1,7 @@
+{
+  "name": "96125980-bc37-4076-b9ef-809bd3e77c65",
+  "fromTable": "ProductSubcategory",
+  "fromColumn": "ProductCategoryKey",
+  "toTable": "ProductCategory",
+  "toColumn": "ProductCategoryKey"
+}

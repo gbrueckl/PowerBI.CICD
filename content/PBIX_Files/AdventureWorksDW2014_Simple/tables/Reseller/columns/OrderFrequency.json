@@ -1,0 +1,29 @@
+{
+  "name": "OrderFrequency",
+  "dataType": "string",
+  "sourceColumn": "OrderFrequency",
+  "lineageTag": "829ad317-3bae-4c00-9042-589c4bb48794",
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "SummarizationSetBy",
+      "value": "Automatic"
+    },
+    {
+      "name": "Format",
+      "value": "<Format Format=\"Text\" />"
+    },
+    {
+      "name": "DataTypeAtRefresh",
+      "value": "String#####not a type"
+    },
+    {
+      "name": "PBI_NameAtRefresh",
+      "value": "OrderFrequency"
+    },
+    {
+      "name": "PBI_WasHiddenAtRefresh",
+      "value": "False"
+    }
+  ]
+}

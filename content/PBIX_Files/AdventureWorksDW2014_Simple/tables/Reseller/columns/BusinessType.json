@@ -1,0 +1,29 @@
+{
+  "name": "BusinessType",
+  "dataType": "string",
+  "sourceColumn": "BusinessType",
+  "lineageTag": "289ad74b-3f90-4e23-bea3-8463b078b5f6",
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "SummarizationSetBy",
+      "value": "Automatic"
+    },
+    {
+      "name": "Format",
+      "value": "<Format Format=\"Text\" />"
+    },
+    {
+      "name": "DataTypeAtRefresh",
+      "value": "String#####not a type"
+    },
+    {
+      "name": "PBI_NameAtRefresh",
+      "value": "BusinessType"
+    },
+    {
+      "name": "PBI_WasHiddenAtRefresh",
+      "value": "False"
+    }
+  ]
+}
