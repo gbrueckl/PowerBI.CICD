@@ -141,7 +141,7 @@ foreach ($pbix_file in $pbix_files) {
 			"-FOLDER ""$output_path"" ""$($pbix_file.BaseName)"""
 		)
 
-		Write-Information "$ind $executable $params"
+		Write-Debug "$ind $executable $params"
 		$p = Start-Process -FilePath $executable -Wait -NoNewWindow -PassThru -RedirectStandardOutput "$temp_name.log" -ArgumentList $params
 
 		if ($p.ExitCode -ne 0) {

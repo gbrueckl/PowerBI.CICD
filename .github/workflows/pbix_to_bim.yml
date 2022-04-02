@@ -193,7 +193,7 @@ jobs:
                 "-FOLDER ""$output_path"" ""$($pbix_file.BaseName)"""
               )
 
-              Write-Information "$ind $executable $params"
+              Write-Debug "$ind $executable $params"
               $p = Start-Process -FilePath $executable -Wait -NoNewWindow -PassThru -RedirectStandardOutput "$temp_name.log" -ArgumentList $params
 
               if ($p.ExitCode -ne 0) {
@@ -237,7 +237,7 @@ jobs:
           git stash
           git pull
           git stash apply
-          git add **/*.database.json
+          git add **/*.json
           git status --porcelain
           git commit -am "Automated extracton of BIM file from PBIX via ${{ github.workflow }} - original changes by ${{ github.actor }}"
           git push
