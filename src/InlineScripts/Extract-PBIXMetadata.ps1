@@ -131,7 +131,7 @@ foreach ($pbix_file in $pbix_files) {
 		$dataset = Get-PowerBIDataset -WorkspaceId $workspace.Id | Where-Object { $_.Name -eq $temp_name }
 		$connection_string = "powerbi://api.powerbi.com/v1.0/myorg/$($workspace.Name);initial catalog=$($dataset.Name)"
 
-		Write-Information "$ind Extracting metadata (BIM) ..."
+		Write-Information "$ind Extracting metadata ..."
 		$executable = Join-Path $tabular_editor_root_path TabularEditor.exe
 		$output_path = "$(Join-Path $pbix_file.DirectoryName $pbix_file.BaseName)"
 		$params = @(
@@ -149,8 +149,6 @@ foreach ($pbix_file in $pbix_files) {
 		}
 
 		Write-Information "$ind Extracted PBIX metadata to FOLDER '($output_path)'!"
-		Write-Information "$ind Overwriting <name> and <id> properties now ..."
-
 		Write-Information "$ind Overwriting 'name' and 'id' properties now ..."
 		# need to overwrite id and name as they are taken from the temporary dataset
 		$bim_json = Get-Content (Join-Path $output_path "database.json") | ConvertFrom-Json
