@@ -1,2 +1,6 @@
 **/*.exe
 **/*.dll
+**/*.local.*
+*.log
+TabularEditor_SerializeOptions.json
+ApplySerializeOptionsAnnotation.csx

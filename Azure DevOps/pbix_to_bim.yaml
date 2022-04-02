@@ -30,7 +30,7 @@ steps:
   fetchDepth: 0
 
 - task: PowerShell@2
-  displayName: Download Tabular Editor 2
+  displayName: Download-TabularEditor2
   inputs:
     targetType: 'inline'
     script: |
@@ -78,17 +78,17 @@ steps:
     SYSTEM_ACCESSTOKEN: $(System.AccessToken)
 
 - task: PowerShell@2
-  displayName: Extract BIM from PBIX
+  displayName: Extract-PBIXMetadata
   inputs:
     targetType: 'inline'
     script: |
-      
       # halt on first error
       $ErrorActionPreference = "Stop"
       # print Information stream
       $InformationPreference = "Continue"
 
       $root_path = (Get-Location).Path
+      $tabular_editor_root_path = $root_path
       Write-Information "Working Directory: $root_path"
 
       Set-PSRepository PSGallery -InstallationPolicy Trusted
@@ -96,7 +96,7 @@ steps:
 
       Import-Module -Name MicrosoftPowerBIMgmt
 
-      $indention = "`t"
+      $ind = "`t"
 
       $git_event_before = $env:GIT_EVENT_BEFORE
       $git_event_after = $env:GIT_EVENT_AFTER
@@ -139,8 +139,6 @@ steps:
       Write-Information "Triggered By: $triggered_by"
       Write-Information "Getting changed .pbix files ..."
       if ($triggered_by -like "*CI" -or $triggered_by -eq "push") {
-        Write-Information "git pull"
-        git pull
         # get the changed .pbix files in the current push
         Write-Information "git diff --name-only $git_event_before $git_event_after --diff-filter=ACM ""*.pbix"""
         $pbix_files = @($(git diff --name-only $git_event_before $git_event_after --diff-filter=ACM "*.pbix"))
@@ -162,7 +160,34 @@ steps:
       }
 
       Write-Information "Changed .pbix files ($($pbix_files.Count)):"
-      $pbix_files | ForEach-Object { Write-Information "$indention$($_.FullName)" }
+      $pbix_files | ForEach-Object { Write-Information "$ind$($_.FullName)" }
+
+      # we need to set Serialization Options to allow export to Folder via TE2
+      $serialization_options = '{
+          "IgnoreInferredObjects": true,
+          "IgnoreInferredProperties": true,
+          "IgnoreTimestamps": true,
+          "SplitMultilineStrings": true,
+          "PrefixFilenames": false,
+          "LocalTranslations": false,
+          "LocalPerspectives": false,
+          "LocalRelationships": false,
+          "Levels": [
+              "Data Sources",
+              "Perspectives",
+              "Relationships",
+              "Roles",
+              "Tables",
+              "Tables/Columns",
+              "Tables/Measures",
+              "Translations"
+          ]
+      }'
+
+      $serialization_options | Out-File (Join-Path $tabular_editor_root_path "TabularEditor_SerializeOptions.json")
+
+      "Model.SetAnnotation(""TabularEditor_SerializeOptions"", ReadFile(@""$(Join-Path $tabular_editor_root_path "TabularEditor_SerializeOptions.json")""));" `
+        | Out-File (Join-Path $tabular_editor_root_path "ApplySerializeOptionsAnnotation.csx")
 
       foreach ($pbix_file in $pbix_files) {
         $report = $null
@@ -170,51 +195,53 @@ steps:
         try {
           Write-Information "Processing  $($pbix_file.FullName) ... "
 
-          Write-Information "$indention Checking if PBIX file contains a datamodel ..."
+          Write-Information "$ind Checking if PBIX file contains a datamodel ..."
           $zip_entries = [IO.Compression.ZipFile]::OpenRead($pbix_file.FullName).Entries.Name;
           if ("DataModel" -notin $zip_entries) {
-            Write-Information "$indention No datamodel found in $($pbix_file.Name) - skipping further processing of this file!"
+            Write-Information "$ind No datamodel found in $($pbix_file.Name) - skipping further processing of this file!"
             continue
           }
           else {
-            Write-Information "$indention Datamodel found!"
+            Write-Information "$ind Datamodel found!"
           }
 
           $temp_name = "$($pbix_file.BaseName)-$(Get-Date -Format 'yyyyMMddTHHmmss')"
-          Write-Information "$indention Uploading $($pbix_file.FullName.Replace($root_path, '')) to $($workspace.Name)/$temp_name ... "
+          Write-Information "$ind Uploading $($pbix_file.FullName.Replace($root_path, '')) to $($workspace.Name)/$temp_name ... "
           $report = New-PowerBIReport -Path $pbix_file.FullName -Name $temp_name -WorkspaceId $workspace.Id
           Start-Sleep -Seconds 5
-          Write-Information "$indention$indention Done!"
+          Write-Information "$ind$ind Done!"
 
-          Write-Information "$indention Getting PowerBI dataset ..."
+          Write-Information "$ind Getting PowerBI dataset ..."
           $dataset = Get-PowerBIDataset -WorkspaceId $workspace.Id | Where-Object { $_.Name -eq $temp_name }
           $connection_string = "powerbi://api.powerbi.com/v1.0/myorg/$($workspace.Name);initial catalog=$($dataset.Name)"
 
-          Write-Information "$indention Extracting metadata (BIM) ..."
-          $executable = Join-Path $root_path TabularEditor.exe
-          $output_path = "$(Join-Path $pbix_file.DirectoryName $pbix_file.BaseName).database.json"
+          Write-Information "$ind Extracting metadata (BIM) ..."
+          $executable = Join-Path $tabular_editor_root_path TabularEditor.exe
+          $output_path = "$(Join-Path $pbix_file.DirectoryName $pbix_file.BaseName)"
           $params = @(
-            """Provider=MSOLAP;Data Source=$connection_string;$login_info"""
+            """Provider=MSOLAP;Data Source=$connection_string;$lobin_info"""
             """$($dataset.Name)"""
-            "-BIM ""$output_path"""
+            "-SCRIPT ""$(Join-Path $tabular_editor_root_path 'ApplySerializeOptionsAnnotation.csx')"""
+            "-FOLDER ""$output_path"" ""$($pbix_file.BaseName)"""
           )
 
-          Write-Information "$indention $executable $params"
+          Write-Information "$ind $executable $params"
           $p = Start-Process -FilePath $executable -Wait -NoNewWindow -PassThru -ArgumentList $params
 
           if ($p.ExitCode -ne 0) {
-            Write-Error "$indention Failed to extract .bim file from $($dataset.WebUrl)!"
+            Write-Error "$ind Failed to extract PBIX metadata from $($dataset.WebUrl)!"
           }
 
-          Write-Information "$indention Created initial BIM-file ($output_path)`n$indention Overwriting <name> and <id> properties now ..."
+          Write-Information "$ind Extracted PBIX metadata to FOLDER '($output_path)'!"
+          Write-Information "$ind Overwriting <name> and <id> properties now ..."
 
+          Write-Information "$ind Overwriting 'name' and 'id' properties now ..."
           # need to overwrite id and name as they are taken from the temporary dataset
-          $bim_json = Get-Content $output_path | ConvertFrom-Json
+          $bim_json = Get-Content (Join-Path $output_path "database.json") | ConvertFrom-Json
           $bim_json.name = $pbix_file.BaseName
           $bim_json.id = $pbix_file.BaseName
-          $bim_json | ConvertTo-Json -Depth 50 | Out-File $output_path
-
-          Write-Information "$indention BIM-file written to $output_path"
+          $bim_json | ConvertTo-Json -Depth 50 | Out-File (Join-Path $output_path "database.json")
+          Write-Information "$ind PBIX metadata written to FOLDER '$output_path'!"
         }
         catch {
           Write-Warning "An error occurred:"
@@ -222,11 +249,11 @@ steps:
         }
         finally {
           if ($report -ne $null) {
-            Write-Information "$indention Removing temporary PowerBI report ..."
+            Write-Information "$ind Removing temporary PowerBI report ..."
             Remove-PowerBIReport -WorkspaceId $workspace.Id -Id $report.Id
           }
           if ($dataset -ne $null) {
-            Write-Information "$indention Removing temporary PowerBI dataset ..."
+            Write-Information "$ind Removing temporary PowerBI dataset ..."
             Invoke-PowerBIRestMethod -Url "https://api.powerbi.com/v1.0/myorg/groups/$($workspace.Id)/datasets/$($dataset.Id)" -Method Delete
           }
         }
