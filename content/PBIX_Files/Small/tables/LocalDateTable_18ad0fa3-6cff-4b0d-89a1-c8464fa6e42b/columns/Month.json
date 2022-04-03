@@ -21,10 +21,6 @@
     {
       "name": "Format",
       "value": "<Format Format=\"Text\" />"
-    },
-    {
-      "name": "DataTypeAtRefresh",
-      "value": "String#####not a type"
     }
   ]
 }

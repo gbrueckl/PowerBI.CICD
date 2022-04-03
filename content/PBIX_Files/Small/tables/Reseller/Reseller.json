@@ -20,9 +20,6 @@
   ],
   "annotations": [
     {
-      "name": "PBI_DescriptionAtRefresh"
-    },
-    {
       "name": "PBI_NavigationStepName",
       "value": "Navigation"
     },
