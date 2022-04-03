@@ -1,6 +1,6 @@
 Param (
-    [parameter(Mandatory = $true)] [String] $PbixFilePath,
-    [parameter(Mandatory = $true)] [String] $PbiPremiumWorkspaceId,
+    [parameter(Mandatory = $true)] [String] $WorkspaceId,
+    [parameter(Mandatory = $true)] [String] $DatasetId,
     [parameter(Mandatory = $true)] [String] $TabularEditorRootPath,
 	[parameter(Mandatory = $true)] [String] $LoginInfo,
 	[parameter(Mandatory = $true)] [String] [ValidateSet("FOLDER", "FILE")] $OutputType
@@ -12,12 +12,6 @@ $InformationPreference = "Continue"
 
 $ind = "`t"
 
-$workspace = Get-PowerBIPremiumWorkspace -WorkspaceId $PbiPremiumWorkspaceId
-
-$pbix_file = Get-Item -Path $PbixFilePath
-
-$report = $null
-$dataset = $null
 try {
     Write-Information "Processing  $($pbix_file.FullName) ... "
     Write-Information "$ind Checking if PBIX file contains a datamodel ..."
@@ -49,7 +43,7 @@ try {
 	if($OutputType -eq "FOLDER")
 	{
 		$output_path = "$(Join-Path $pbix_file.DirectoryName $pbix_file.BaseName)"
-        $annotations_script = .\Prepare-TabulareEditorAnnotationsScript.ps1 -TabularEditorRootPath $TabularEditorRootPath
+        $annotations_script = Prepare-TabulareEditorAnnotationsScript.ps1 -TabularEditorRootPath $TabularEditorRootPath
 		$params += @(
 			$annotations_script
 			"-FOLDER ""$output_path"" ""$($pbix_file.BaseName)"""

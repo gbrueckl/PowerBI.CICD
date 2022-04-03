@@ -1,4 +1,4 @@
-name: PBIX to BIM
+name: Extract PBIX metadata
 
 on:
   workflow_dispatch:
@@ -228,7 +228,7 @@ jobs:
           Write-Information "Finished!"
       shell: pwsh
 
-    - name: Push BIM Files to Git repo
+    - name: Push PBIX metadata to Git repo
       run: |
           git config --global user.name '${{ github.actor }}'
           git config --global user.email '${{ github.actor }}@users.noreply.github.com'
@@ -237,6 +237,6 @@ jobs:
           git stash apply
           git add **/*.json
           git status --porcelain
-          git commit -am "Automated extracton of BIM file from PBIX via ${{ github.workflow }} - original changes by ${{ github.actor }}"
+          git commit -am "Automated extracton of metadata from PBIX via ${{ github.workflow }} - original changes by ${{ github.actor }}"
           git push
 

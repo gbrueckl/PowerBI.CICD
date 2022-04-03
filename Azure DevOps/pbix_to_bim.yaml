@@ -1,4 +1,4 @@
-name: PBIX to BIM
+name: Extract PBIX metadata
 
 trigger:
   batch: true
@@ -261,7 +261,7 @@ steps:
     pwsh: true  
 
 - task: CmdLine@2
-  displayName: Push BIM Files to Git repo
+  displayName: Push PBIX metadata to Git repo
   inputs:
     script: |
       SET _full_branch_name=$(Build.SourceBranch)
@@ -275,5 +275,5 @@ steps:
       git stash apply
       git add **/*.json
       git status --porcelain
-      git commit -am "Automated extracton of BIM file from PBIX - original changes by $(Build.RequestedFor) \n[skip ci]"
+      git commit -am "Automated extracton of metadata from PBIX - original changes by $(Build.RequestedFor) \n[skip ci]"
       git push origin HEAD:%_full_branch_name%

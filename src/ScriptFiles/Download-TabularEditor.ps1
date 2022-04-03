@@ -1,12 +1,12 @@
 Param (
-    [parameter(Mandatory = $true)] [String] $Path
+    [parameter(Mandatory = $true)] [String] $DownloadFolder
 )
 
 # Download URL for Tabular Editor portable:
 $TabularEditorUrl = "https://cdn.tabulareditor.com/files/te2/TabularEditor.Portable.zip" 
 
 # Download destination (root of PowerShell script execution path):
-$DownloadDestination = Join-Path ($Path) "TabularEditor.zip"
+$DownloadDestination = Join-Path ($DownloadFolder) "TabularEditor.zip"
 
 # Download from GitHub:
 Invoke-WebRequest -Uri $TabularEditorUrl -OutFile $DownloadDestination
