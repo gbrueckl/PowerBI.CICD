@@ -4,7 +4,7 @@
   "sourceColumn": "DayNumberOfWeek",
   "formatString": "0",
   "lineageTag": "6012f28f-4f9e-4c0e-8e6c-7590fe365ea0",
-  "summarizeBy": "sum",
+  "summarizeBy": "none",
   "annotations": [
     {
       "name": "SummarizationSetBy",

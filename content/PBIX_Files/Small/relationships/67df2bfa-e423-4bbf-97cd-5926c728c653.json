@@ -1,0 +1,8 @@
+{
+  "name": "67df2bfa-e423-4bbf-97cd-5926c728c653",
+  "fromTable": "Product",
+  "fromColumn": "EndDate",
+  "toTable": "Date",
+  "toColumn": "FullDateAlternateKey",
+  "isActive": false
+}

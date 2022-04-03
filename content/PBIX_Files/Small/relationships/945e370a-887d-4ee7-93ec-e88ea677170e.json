@@ -1,0 +1,7 @@
+{
+  "name": "945e370a-887d-4ee7-93ec-e88ea677170e",
+  "fromTable": "Product",
+  "fromColumn": "StartDate",
+  "toTable": "Date",
+  "toColumn": "FullDateAlternateKey"
+}

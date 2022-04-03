@@ -4,7 +4,7 @@
   "sourceColumn": "MonthNumberOfYear",
   "formatString": "0",
   "lineageTag": "dca4de72-e096-4d4c-979f-130106f7cfe4",
-  "summarizeBy": "sum",
+  "summarizeBy": "none",
   "annotations": [
     {
       "name": "SummarizationSetBy",

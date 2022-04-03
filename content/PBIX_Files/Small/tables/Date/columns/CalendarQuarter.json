@@ -4,7 +4,7 @@
   "sourceColumn": "CalendarQuarter",
   "formatString": "0",
   "lineageTag": "a94678c4-e1aa-4398-931d-f845d396af23",
-  "summarizeBy": "sum",
+  "summarizeBy": "none",
   "annotations": [
     {
       "name": "SummarizationSetBy",

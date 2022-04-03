@@ -1,8 +1,0 @@
-{
-  "name": "67fc3ee3-d177-461c-aa3b-5100caa2263a",
-  "fromTable": "Product",
-  "fromColumn": "EndDate",
-  "toTable": "LocalDateTable_18ad0fa3-6cff-4b0d-89a1-c8464fa6e42b",
-  "toColumn": "Date",
-  "joinOnDateBehavior": "datePartOnly"
-}

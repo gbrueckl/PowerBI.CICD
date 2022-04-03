@@ -4,7 +4,7 @@
   "sourceColumn": "DayNumberOfYear",
   "formatString": "0",
   "lineageTag": "b473cf3d-684d-42a4-8f64-1bfeb84c2624",
-  "summarizeBy": "sum",
+  "summarizeBy": "none",
   "annotations": [
     {
       "name": "SummarizationSetBy",

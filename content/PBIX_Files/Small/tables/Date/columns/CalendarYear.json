@@ -4,7 +4,7 @@
   "sourceColumn": "CalendarYear",
   "formatString": "0",
   "lineageTag": "ca495d96-81f5-436c-b031-302912940761",
-  "summarizeBy": "sum",
+  "summarizeBy": "none",
   "annotations": [
     {
       "name": "SummarizationSetBy",
