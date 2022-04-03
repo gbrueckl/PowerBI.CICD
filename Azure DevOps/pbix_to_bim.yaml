@@ -4,10 +4,10 @@ trigger:
   batch: true
   branches:
     include:
-      - '*'
+      - '*' # on all branches
   paths:
     include:
-      - '**/*.pbix'
+      - '**/*.pbix' # whenever a .pbix file is pushed
 
 pool:
   vmImage: windows-latest
@@ -19,7 +19,7 @@ parameters:
   default: /
 
 variables:
-- group: PowerBI ServicePrincipal    # <-- change this to match your library/variable group
+- group: PowerBI UsernamePassword    # <-- change this to match your library/variable group
 - name: MANUAL_TRIGGER_PATH_FILTER
   value: ${{ parameters.path_filter }}
 

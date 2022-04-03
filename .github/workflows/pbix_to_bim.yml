@@ -9,12 +9,12 @@ on:
         default: "/"
   push:
     paths:
-    - '**/*.pbix'
+    - '**/*.pbix' # whenever a .pbix file is pushed
 
 jobs:
   extract_pbix_metadata:
     runs-on: windows-latest
-    environment: PowerBI UsernamePassword    # <-- change this to match your library/variable group
+    environment: PowerBI  # <-- change this to match your library/variable group
 
     steps:
     - uses: actions/checkout@v2
