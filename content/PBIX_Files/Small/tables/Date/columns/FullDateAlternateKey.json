@@ -18,18 +18,6 @@
     {
       "name": "Format",
       "value": "<Format Format=\"DateTimeGeneralPattern\"><DateTimes><DateTime LCID=\"1033\" Group=\"LongDate\" FormatString=\"dddd, MMMM d, yyyy\" /></DateTimes></Format>"
-    },
-    {
-      "name": "DataTypeAtRefresh",
-      "value": "DateTime#####Date"
-    },
-    {
-      "name": "PBI_NameAtRefresh",
-      "value": "FullDateAlternateKey"
-    },
-    {
-      "name": "PBI_WasHiddenAtRefresh",
-      "value": "False"
     }
   ]
 }

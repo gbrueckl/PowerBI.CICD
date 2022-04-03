@@ -13,18 +13,6 @@
     {
       "name": "Format",
       "value": "<Format Format=\"CurrencyGeneral\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"€ English (United States)\" Symbol=\"€\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
-    },
-    {
-      "name": "DataTypeAtRefresh",
-      "value": "Decimal#####not a type"
-    },
-    {
-      "name": "PBI_NameAtRefresh",
-      "value": "StandardCost"
-    },
-    {
-      "name": "PBI_WasHiddenAtRefresh",
-      "value": "False"
     }
   ]
 }

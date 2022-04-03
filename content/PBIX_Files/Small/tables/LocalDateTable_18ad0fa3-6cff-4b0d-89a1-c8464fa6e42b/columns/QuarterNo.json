@@ -20,10 +20,6 @@
     {
       "name": "Format",
       "value": "<Format Format=\"NumberWhole\" Accuracy=\"0\" />"
-    },
-    {
-      "name": "DataTypeAtRefresh",
-      "value": "Int64#####not a type"
     }
   ]
 }
